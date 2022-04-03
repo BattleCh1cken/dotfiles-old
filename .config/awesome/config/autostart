@@ -1,0 +1,16 @@
+#!/bin/sh
+
+start() {
+  if ! pgrep -f $1 ;
+  then
+    $@&
+  fi 
+}
+
+# music
+
+# compositor
+start picom -b --experimental-backends --dbus --config $HOME/.config/awesome/theme/picom.conf
+
+# auth
+
