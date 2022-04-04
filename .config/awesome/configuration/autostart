@@ -12,5 +12,7 @@ start() {
 # compositor
 start picom -b --experimental-backends --dbus --config $HOME/.config/awesome/theme/picom.conf
 
-# auth
+
+start mailspring
+start discord
 

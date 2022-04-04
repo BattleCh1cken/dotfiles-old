@@ -4,4 +4,5 @@ local gears = require("gears")
 local gfs = gears.filesystem
 local wibox = require("wibox")
 
-require("config.keybinds")
+require("configuration.keybinds")
+require("configuration.rules")
