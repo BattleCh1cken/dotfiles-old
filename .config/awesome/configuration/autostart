@@ -7,10 +7,9 @@ start() {
   fi 
 }
 
-# music
 
 # compositor
-start picom -b --experimental-backends --dbus --config $HOME/.config/awesome/theme/picom.conf
+start picom -b --experimental-backends --dbus 
 
 
 start mailspring

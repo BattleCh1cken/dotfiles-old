@@ -44,8 +44,8 @@ terminal = "kitty"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
 browser = "firefox"
-launcher = "rofi -show drun -theme " .. os.getenv("HOME") .. "/.config/awesome/theme/rofi.rasi"
-finder = "rofi =show window -them " .. os.getenv("HOME") .. "/.config/awesome/theme/rofi.rasi"
+launcher = "rofi -show drun"
+finder = "rofi =show window"
 
 -- {{{ Menu
 -- Create a launcher widget and a main menu
