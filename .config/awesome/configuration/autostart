@@ -9,7 +9,7 @@ start() {
 
 
 # compositor
-start picom -b --experimental-backends --dbus 
+start picom --experimental-backends 
 
 
 start mailspring

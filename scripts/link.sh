@@ -1,6 +1,6 @@
 #!/bin/bash
 home_files=( .bashrc .zshrc .xinitrc .gitconfig .aliases .tmux.conf )
-config_files=( nvim awesome starship kitty )
+config_files=( nvim awesome starship kitty rofi picom)
 echo "----- Installing Dotfiles -----"
 i
 
