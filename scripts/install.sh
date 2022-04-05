@@ -1,12 +1,5 @@
 #!/bin/bash
 
-installCore(){
-while read p; do
-  echo "Installing $p"
-  sudo pacman -S $p
-done <~/dotfiles/pkgs/core.txt
-}
-
 installYay(){
   cd ~
   git clone "https://aur.archlinux.org/yay.git"
@@ -32,45 +25,26 @@ while read p; do
   yay -S --noconfirm --needed $p
 done <~/dotfiles/pkgs/aur.txt
 }
-installBspwm(){
-while read p; do
-  echo "Installing $p"
-  pacman -S --noconfirm --needed $p
-done <~/dotfiles/pkgs/bspwm.txt
-}
+
 linkDotfiles(){
 sh ~/dotfiles/link.sh
 }
 
-# echo -ne "Choose the option you want\n"
-# echo -n "0. All of the below\n"
-# echo -n "1. Install core packages\n"
-# echo -n "2. Install yay\n"
-# echo -n "3. Install the Chaotic Aur Repo\n"
-# echo -n "4. Install the packages needed for Bspwm\n"
-# echo -n "5. Link the dotfiles\n"
-# read choice
 echo -ne "
 0. All of the below
-1. Install core packages
-2. Install yay
-3. Install Chaotic Aur
-4. Install packages needed for Bspwm
-5. Link dotfiles
+1. Install yay
+2. Install Chaotic Aur
+3. Link dotfiles
 "
 read choice
 case "$choice" in
-0) installCore installYay installChaotic installBspwm linkDotfiles 
+0) installYay installChaotic linkDotfiles 
   ;;
-1) installCore
-  ;;
-2) installYay
+1) installYay
   ;; 
-3) installChaotic
+2) installChaotic
   ;;
-4) installBspwm
-  ;;
-5) linkDotfiles
+3) linkDotfiles
   ;;
 *) echo "Please choose a valid option." 
   ;;
