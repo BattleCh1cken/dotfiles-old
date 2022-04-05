@@ -27,8 +27,10 @@ return packer.startup(function()
 	use("ggandor/lightspeed.nvim")
 	use({ "norcalli/nvim-colorizer.lua", config = 'require "plugins.configs.colorizer"' })
 	--Themes
-	use("shaunsingh/nord.nvim")
-	use("andersevenrud/nordic.nvim")
+  use({
+	  "catppuccin/nvim",
+	  as = "catppuccin"
+  })
 	--CMP Plugins
 	use("hrsh7th/nvim-cmp") -- The completion plugin
 	use("hrsh7th/cmp-buffer") -- buffer completions

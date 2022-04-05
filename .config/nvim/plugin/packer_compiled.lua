@@ -86,6 +86,11 @@ _G.packer_plugins = {
     path = "/home/battlechicken/.local/share/nvim/site/pack/packer/start/bufferline.nvim",
     url = "https://github.com/akinsho/bufferline.nvim"
   },
+  catppuccin = {
+    loaded = true,
+    path = "/home/battlechicken/.local/share/nvim/site/pack/packer/start/catppuccin",
+    url = "https://github.com/catppuccin/nvim"
+  },
   ["cmp-buffer"] = {
     loaded = true,
     path = "/home/battlechicken/.local/share/nvim/site/pack/packer/start/cmp-buffer",
@@ -143,16 +148,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/battlechicken/.local/share/nvim/site/pack/packer/start/lualine.nvim",
     url = "https://github.com/nvim-lualine/lualine.nvim"
-  },
-  ["nord.nvim"] = {
-    loaded = true,
-    path = "/home/battlechicken/.local/share/nvim/site/pack/packer/start/nord.nvim",
-    url = "https://github.com/shaunsingh/nord.nvim"
-  },
-  ["nordic.nvim"] = {
-    loaded = true,
-    path = "/home/battlechicken/.local/share/nvim/site/pack/packer/start/nordic.nvim",
-    url = "https://github.com/andersevenrud/nordic.nvim"
   },
   ["null-ls.nvim"] = {
     loaded = true,
@@ -245,50 +240,50 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: nvim-colorizer.lua
-time([[Config for nvim-colorizer.lua]], true)
-require "plugins.configs.colorizer"
-time([[Config for nvim-colorizer.lua]], false)
--- Config for: bufferline.nvim
-time([[Config for bufferline.nvim]], true)
-require "plugins.configs.bufferline"
-time([[Config for bufferline.nvim]], false)
--- Config for: nvim-autopairs
-time([[Config for nvim-autopairs]], true)
-require "plugins.configs.autopairs"
-time([[Config for nvim-autopairs]], false)
--- Config for: lualine.nvim
-time([[Config for lualine.nvim]], true)
-require "plugins.configs.lualine"
-time([[Config for lualine.nvim]], false)
--- Config for: indent-blankline.nvim
-time([[Config for indent-blankline.nvim]], true)
-require"plugins.configs.indent-blankline"
-time([[Config for indent-blankline.nvim]], false)
--- Config for: telescope.nvim
-time([[Config for telescope.nvim]], true)
-require "plugins.configs.telescope"
-time([[Config for telescope.nvim]], false)
--- Config for: toggleterm.nvim
-time([[Config for toggleterm.nvim]], true)
-require "plugins.configs.toggleterm"
-time([[Config for toggleterm.nvim]], false)
--- Config for: gitsigns.nvim
-time([[Config for gitsigns.nvim]], true)
-require "plugins.configs.gitsigns"
-time([[Config for gitsigns.nvim]], false)
--- Config for: nvim-treesitter
-time([[Config for nvim-treesitter]], true)
-require "plugins.configs.treesitter"
-time([[Config for nvim-treesitter]], false)
--- Config for: Comment.nvim
-time([[Config for Comment.nvim]], true)
-require "plugins.configs.comment"
-time([[Config for Comment.nvim]], false)
 -- Config for: nvim-tree.lua
 time([[Config for nvim-tree.lua]], true)
 require "plugins.configs.nvim-tree"
 time([[Config for nvim-tree.lua]], false)
+-- Config for: gitsigns.nvim
+time([[Config for gitsigns.nvim]], true)
+require "plugins.configs.gitsigns"
+time([[Config for gitsigns.nvim]], false)
+-- Config for: nvim-autopairs
+time([[Config for nvim-autopairs]], true)
+require "plugins.configs.autopairs"
+time([[Config for nvim-autopairs]], false)
+-- Config for: indent-blankline.nvim
+time([[Config for indent-blankline.nvim]], true)
+require"plugins.configs.indent-blankline"
+time([[Config for indent-blankline.nvim]], false)
+-- Config for: Comment.nvim
+time([[Config for Comment.nvim]], true)
+require "plugins.configs.comment"
+time([[Config for Comment.nvim]], false)
+-- Config for: nvim-colorizer.lua
+time([[Config for nvim-colorizer.lua]], true)
+require "plugins.configs.colorizer"
+time([[Config for nvim-colorizer.lua]], false)
+-- Config for: nvim-treesitter
+time([[Config for nvim-treesitter]], true)
+require "plugins.configs.treesitter"
+time([[Config for nvim-treesitter]], false)
+-- Config for: bufferline.nvim
+time([[Config for bufferline.nvim]], true)
+require "plugins.configs.bufferline"
+time([[Config for bufferline.nvim]], false)
+-- Config for: toggleterm.nvim
+time([[Config for toggleterm.nvim]], true)
+require "plugins.configs.toggleterm"
+time([[Config for toggleterm.nvim]], false)
+-- Config for: lualine.nvim
+time([[Config for lualine.nvim]], true)
+require "plugins.configs.lualine"
+time([[Config for lualine.nvim]], false)
+-- Config for: telescope.nvim
+time([[Config for telescope.nvim]], true)
+require "plugins.configs.telescope"
+time([[Config for telescope.nvim]], false)
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
