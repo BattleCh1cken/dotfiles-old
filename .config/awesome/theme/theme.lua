@@ -14,8 +14,8 @@ local theme = {}
 
 theme.font          = "JetBrains Mono Nerd Font 8"
 
-theme.bg_normal     = "#4c566a"
-theme.bg_focus      = "#bf616a"
+theme.bg_normal     = "#575268"
+theme.bg_focus      = "#C9CBFF"
 theme.bg_urgent     = "#ff0000"
 theme.bg_minimize   = "#444444"
 theme.bg_systray    = theme.bg_normal
@@ -28,7 +28,7 @@ theme.fg_minimize   = "#ffffff"
 theme.useless_gap         = dpi(5)
 theme.border_width        = dpi(2)
 theme.border_color_normal = "#4c566a"
-theme.border_color_active = "#bf616a"
+theme.border_color_active = "#C9CBFF"
 theme.border_color_marked = "#91231c"
 
 -- There are other variable sets
@@ -97,7 +97,7 @@ theme.titlebar_maximized_button_focus_inactive  = themes_path.."default/titlebar
 theme.titlebar_maximized_button_normal_active = themes_path.."default/titlebar/maximized_normal_active.png"
 theme.titlebar_maximized_button_focus_active  = themes_path.."default/titlebar/maximized_focus_active.png"
 
-theme.wallpaper = "~/Pictures/wallpaper/nord-wallpapers/space-mars-4480x2520-nordified.jpg"
+theme.wallpaper = "~/Pictures/wallpaper/wallpaper.png"
 
 -- You can use your own layout icons like this:
 theme.layout_fairh = themes_path.."default/layouts/fairhw.png"
