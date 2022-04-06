@@ -8,19 +8,18 @@ installYay(){
 
 }
 installChaotic(){
-  pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
-  pacman-key --lsign-key FBA220DFC880C036
-  pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+  sudo pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
+  sudo pacman-key --lsign-key FBA220DFC880C036
+  sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
   if grep -q chaotic-aur /etc/pacman.conf; then
     echo "chaotic-aur already installed"
   else 
-    echo "[chaotic-aur]" >> /etc/pacman.conf
-    echo " Include = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.conf 
+    sudo echo "[chaotic-aur]" >> /etc/pacman.conf
+    sudo echo " Include = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.conf 
 fi
 }
 
 installNVChad(){
-  pacman -S --noconfirm ripgrep neovim
   if test -d ~/.config/nvim; then
     echo "existing nvim config detected, delete it first"
   else {
@@ -29,6 +28,9 @@ installNVChad(){
     ln -s ~/dotfiles/.config/NvChad/custom ~/.config/nvim/lua/ 
   }
   fi
+}
+installPackages(){
+  yay -S --noconfirm --needed awesome-git kitty rofi picom neovim ripgrep 
 }
 
 linkDotfiles(){
@@ -44,7 +46,7 @@ echo -ne "
 "
 read choice
 case "$choice" in
-0) installYay installChaotic linkDotfiles 
+0) installYay installChaotic installPackages linkDotfiles 
   ;;
 1) installYay
   ;; 

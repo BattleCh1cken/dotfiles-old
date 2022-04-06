@@ -1,4 +1,4 @@
 return {
   {"ggandor/lightspeed.nvim"},
-  {"norcalli/nvim-colorizer.lua"}
+  {"williamboman/nvim-lsp-installer"}
 }

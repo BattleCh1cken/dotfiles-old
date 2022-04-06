@@ -10,4 +10,10 @@ M.ui = {
 }
 local userPlugins = require "custom.plugins" -- path to table
 M.plugins = {   install = userPlugins}
+
+M.options = {
+  lspconfig = {
+    setup_lspconf = "custom.config.lspconfig", -- or any path
+  }
+}
 return M
