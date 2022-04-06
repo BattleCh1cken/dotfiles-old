@@ -178,7 +178,49 @@ awful.keyboard.append_global_keybindings({
         end,
     }
 })
+awful.keyboard.append_global_keybindings({
 
+    -- Brightness Control
+    awful.key({}, "XF86MonBrightnessUp", function() 
+        awful.spawn("brightnessctl set 5%+ -q") 
+    end,
+    {description = "increase brightness", group = "hotkeys"}),
+    awful.key({}, "XF86MonBrightnessDown", function() 
+        awful.spawn("brightnessctl set 5%- -q") 
+    end,
+    {description = "decrease brightness", group = "hotkeys"}),
+
+    -- Volume control
+    awful.key({}, "XF86AudioRaiseVolume", function()
+        awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +05%")
+    end,
+    {description = "increase volume", group = "hotkeys"}),
+    awful.key({}, "XF86AudioLowerVolume", function()
+        awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ -05%")
+    end,
+    {description = "decrease volume", group = "hotkeys"}),
+    awful.key({}, "XF86AudioMute", function()
+        helpers.volume_control(0)
+    end,
+    {description = "mute volume", group = "hotkeys"}),
+
+    -- Music
+    awful.key({}, "XF86AudioPlay", function()
+        playerctl:play_pause()
+    end,
+    {description = "toggle music", group = "hotkeys"}),
+
+    awful.key({}, "XF86AudioPrev", function()
+        playerctl:previous()
+    end,
+    {description = "previous music", group = "hotkeys"}),
+
+    awful.key({}, "XF86AudioNext", function()
+        playerctl:next()
+    end,
+    {description = "next music", group = "hotkeys"}),
+
+})
 client.connect_signal("request::default_keybindings", function()
     awful.keyboard.append_client_keybindings({
         awful.key({ modkey,           }, "f",

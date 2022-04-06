@@ -8,5 +8,6 @@ local M = {}
 M.ui = {
    theme = "catppuccin",
 }
-
+local userPlugins = require "custom.plugins" -- path to table
+M.plugins = {   install = userPlugins}
 return M
