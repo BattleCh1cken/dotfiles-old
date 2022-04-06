@@ -23,7 +23,7 @@ done
 #create symlinks for each file in the .config folder
 for i in "${config_files[@]}"
 do
-  if test -d ~/.config/$i;then
+  if test -d ~/.config/$i; then
     echo "$i already exists or is already linked"
   else ln -s ~/dotfiles/.config/"$i" ~/.config/ && echo "linking $i"
   fi

@@ -19,11 +19,16 @@ installChaotic(){
 fi
 }
 
-installAur(){
-while read p; do
-  echo "Installing $p"
-  yay -S --noconfirm --needed $p
-done <~/dotfiles/pkgs/aur.txt
+installNVChad(){
+  pacman -S --noconfirm ripgrep neovim
+  if test -d ~/.config/nvim; then
+    echo "existing nvim config detected, delete it first"
+  else {
+    git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
+    nvim +'hi NormalFloat guibg=#1e222a' +PackerSync
+    ln -s ~/dotfiles/.config/NvChad/custom ~/.config/nvim/lua/ 
+  }
+  fi
 }
 
 linkDotfiles(){
@@ -34,7 +39,8 @@ echo -ne "
 0. All of the below
 1. Install yay
 2. Install Chaotic Aur
-3. Link dotfiles
+3. Install NvChad
+4. Link dotfiles
 "
 read choice
 case "$choice" in
@@ -44,7 +50,9 @@ case "$choice" in
   ;; 
 2) installChaotic
   ;;
-3) linkDotfiles
+3) installNVChad
+  ;;
+4) linkDotfiles
   ;;
 *) echo "Please choose a valid option." 
   ;;
