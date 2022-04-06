@@ -1,3 +1,4 @@
 return {
-  {"ggandor/lightspeed.nvim"}
+  {"ggandor/lightspeed.nvim"},
+  {"norcalli/nvim-colorizer.lua"}
 }

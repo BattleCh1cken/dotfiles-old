@@ -7,9 +7,28 @@ local wibox = require("wibox")
 
 -- Theme handling library
 local beautiful = require("beautiful")
+local xresources = require("beautiful.xresources")
+local dpi = xresources.apply_dpi
+
+
+
 
 mykeyboardlayout = awful.widget.keyboardlayout()
-
+local bg = wibox.widget {
+    {
+        {
+            text = "foo",
+            widget = wibox.widget.textbox
+        },
+        {
+            text = "bar",
+            widget = wibox.widget.textbox
+        },
+        layout = wibox.layout.fixed.vertical
+    },
+    bg = "#ff0000",
+    widget = wibox.container.background
+}
 mytextclock = wibox.widget.textclock()
 screen.connect_signal("request::desktop_decoration", function(s)
 
@@ -79,6 +98,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
             s.mytasklist, -- Middle widget
             { -- Right widgets
                 layout = wibox.layout.fixed.horizontal,
+                bg,
                 mykeyboardlayout,
                 wibox.widget.systray(),
                 mytextclock,

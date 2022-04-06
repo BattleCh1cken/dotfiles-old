@@ -37,11 +37,12 @@ source ~/.extra
 #Plugins
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
-source /usr/share/autojump/autojump.zsh 2>/dev/null
 
 #Plugin config
 bindkey '^ ' autosuggest-accept
 # Init Starship
 eval "$(starship init zsh)" 
+#Init Zoxide
+eval "$(zoxide init zsh)"
 # Setup Starship custom prompt
 export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
