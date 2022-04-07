@@ -17,7 +17,6 @@ HISTFILE=~/.cache/zshhistory
 setopt appendhistory
 
 
-#Completion
 ENABLE_CORRECTION="true"
 
 

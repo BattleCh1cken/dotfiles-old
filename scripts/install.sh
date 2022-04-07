@@ -24,8 +24,8 @@ installNVChad(){
     echo "existing nvim config detected, delete it first"
   else {
     git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
+#    ln -s ~/dotfiles/.config/NvChad/custom ~/.config/nvim/lua/ 
     nvim +'hi NormalFloat guibg=#1e222a' +PackerSync
-    ln -s ~/dotfiles/.config/NvChad/custom ~/.config/nvim/lua/ 
   }
   fi
 }
