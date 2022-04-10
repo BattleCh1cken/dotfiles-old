@@ -69,6 +69,7 @@ end)
 screen.connect_signal("request::wallpaper", function(s)
     awful.wallpaper {
         screen = s,
+        bg = "#302D41",
         widget = {
             {
                 image     = beautiful.wallpaper,

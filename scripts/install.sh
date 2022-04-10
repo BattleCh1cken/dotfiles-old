@@ -30,11 +30,11 @@ installNVChad(){
   fi
 }
 installPackages(){
-  yay -S --noconfirm --needed awesome-git kitty rofi picom neovim ripgrep 
+  yay -S --noconfirm --needed awesome-git kitty rofi picom neovim ripgrep zsh zsh-autosuggestions zsh-syntax-highlighting zoxide starship exa  
 }
 
 linkDotfiles(){
-sh ~/dotfiles/link.sh
+sh ~/dotfiles/scripts/link.sh
 }
 
 echo -ne "
@@ -42,7 +42,8 @@ echo -ne "
 1. Install yay
 2. Install Chaotic Aur
 3. Install NvChad
-4. Link dotfiles
+4. Install Packages
+5. Link dotfiles
 "
 read choice
 case "$choice" in
@@ -53,8 +54,10 @@ case "$choice" in
 2) installChaotic
   ;;
 3) installNVChad
+   ;;
+4) installPackages
   ;;
-4) linkDotfiles
+5) linkDotfiles
   ;;
 *) echo "Please choose a valid option." 
   ;;
