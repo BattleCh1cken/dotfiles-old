@@ -6,6 +6,7 @@ local theme_assets = require("beautiful.theme_assets")
 local xresources = require("beautiful.xresources")
 local rnotification = require("ruled.notification")
 local dpi = xresources.apply_dpi
+local xrdb = require("beautiful.xresources").get_current_theme()
 
 local gfs = require("gears.filesystem")
 local themes_path = "/usr/share/awesome/theme"
@@ -14,9 +15,28 @@ local theme = {}
 
 theme.font          = "JetBrains Mono Nerd Font 8"
 
-theme.bg_normal     = "#575268"
+theme.xbackground = xrdb.background
+theme.xforeground = xrdb.foreground
+theme.xcolor0 = xrdb.color0
+theme.xcolor1 = xrdb.color1
+theme.xcolor2 = xrdb.color2
+theme.xcolor3 = xrdb.color3
+theme.xcolor4 = xrdb.color4
+theme.xcolor5 = xrdb.color5
+theme.xcolor6 = xrdb.color6
+theme.xcolor7 = xrdb.color7
+theme.xcolor8 = xrdb.color8
+theme.xcolor9 = xrdb.color9
+theme.xcolor10 = xrdb.color10
+theme.xcolor11 = xrdb.color11
+theme.xcolor12 = xrdb.color12
+theme.xcolor13 = xrdb.color13
+theme.xcolor14 = xrdb.color14
+theme.xcolor15 = xrdb.color15
+
+theme.bg_normal     = "#161320"
 theme.bg_focus      = "#C9CBFF"
-theme.bg_urgent     = "#ff0000"
+theme.bg_urgent     = "#F28FAD"
 theme.bg_minimize   = "#444444"
 theme.bg_systray    = theme.bg_normal
 
@@ -27,9 +47,10 @@ theme.fg_minimize   = "#ffffff"
 
 theme.useless_gap         = dpi(5)
 theme.border_width        = dpi(2)
-theme.border_color_normal = "#4c566a"
+theme.border_color_normal = "#302D41"
 theme.border_color_active = "#C9CBFF"
-theme.border_color_marked = "#91231c"
+theme.border_color_marked = "#F28FAD"
+
 
 -- There are other variable sets
 -- overriding the default one when

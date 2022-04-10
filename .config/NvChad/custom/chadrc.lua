@@ -13,6 +13,10 @@ M.ui = {
 }
 
 M.plugins = {
+   status = {
+      colorizer = true
+
+   },
    install = {
      {
        "williamboman/nvim-lsp-installer",

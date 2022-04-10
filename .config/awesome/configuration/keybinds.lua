@@ -5,6 +5,8 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 
 local beautiful = require("beautiful")
 
+local bling = require("module.bling")
+local playerctl = bling.signal.playerctl.lib()
 modkey = "Mod4"
 alt = "Mod1"
 ctrl = "Control"
@@ -48,49 +50,27 @@ awful.keyboard.append_global_keybindings({
 
 -- Tags related keybindings
 awful.keyboard.append_global_keybindings({
-    awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
-              {description = "view previous", group = "tag"}),
-    awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
-              {description = "view next", group = "tag"}),
-    awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
-              {description = "go back", group = "tag"}),
-})
+    awful.key({modkey}, "j", function()
+        awful.client.focus.bydirection("down")
+        bling.module.flash_focus.flashfocus(client.focus)
+    end,
+    {description = "focus down", group = "client"}),
 
--- Focus related keybindings
-awful.keyboard.append_global_keybindings({
-    awful.key({ modkey,}, "h",
-        function ()
-            awful.client.focus.byidx( 1)
-        end,
-        {description = "focus next by index", group = "client"}
-    ),
-    awful.key({ modkey,}, "l",
-        function ()
-            awful.client.focus.byidx(-1)
-        end,
-        {description = "focus previous by index", group = "client"}
-    ),
-    awful.key({ modkey,}, "Tab",
-        function ()
-            awful.client.focus.history.previous()
-            if client.focus then
-                client.focus:raise()
-            end
-        end,
-        {description = "go back", group = "client"}),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
-              {description = "focus the next screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
-              {description = "focus the previous screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "n",
-              function ()
-                  local c = awful.client.restore()
-                  -- Focus restored client
-                  if c then
-                    c:activate { raise = true, context = "key.unminimize" }
-                  end
-              end,
-              {description = "restore minimized", group = "client"}),
+    awful.key({modkey}, "k", function()
+        awful.client.focus.bydirection("up")
+        bling.module.flash_focus.flashfocus(client.focus)
+    end,
+    {description = "focus up", group = "client"}),
+    awful.key({modkey}, "h", function()
+        awful.client.focus.bydirection("left")
+        bling.module.flash_focus.flashfocus(client.focus)
+    end,
+    {description = "focus left", group = "client"}),
+    awful.key({modkey}, "l", function()
+        awful.client.focus.bydirection("right")
+        bling.module.flash_focus.flashfocus(client.focus)
+    end,
+    {description = "focus right", group = "client"}),
 })
 
 -- Layout related keybindings
