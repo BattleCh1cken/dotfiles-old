@@ -30,11 +30,14 @@ installNVChad(){
   fi
 }
 installPackages(){
-  yay -S --noconfirm --needed awesome-git kitty rofi picom neovim ripgrep zsh zsh-autosuggestions zsh-syntax-highlighting zoxide starship exa  
+  yay -S --noconfirm --needed awesome-git kitty rofi picom neovim ripgrep zsh zsh-autosuggestions zsh-syntax-highlighting zoxide starship exa playerctl acpi
 }
 
 linkDotfiles(){
 sh ~/dotfiles/scripts/link.sh
+#Clone awesome dependencies
+git clone https://github.com/BlingCorp/bling.git ~/.config/awesome/module/bling
+git clone https://github.com/andOrlando/rubato.git ~/.config/awesome/module/rubato
 }
 
 echo -ne "

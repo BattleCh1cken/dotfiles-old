@@ -1,302 +1,131 @@
 -- Standard awesome library
-local awful = require("awful")
 local gears = require("gears")
-
--- Widget library
-local wibox = require("wibox")
+local awful = require("awful")
 
 -- Theme handling library
 local beautiful = require("beautiful")
 
--- Rubato
-local rubato = require("module.rubato")
+-- Widget library
+local wibox = require("wibox")
 
 -- Helpers
 local helpers = require("helpers")
 
--- Get screen geometry
-local screen_width = awful.screen.focused().geometry.width
-local screen_height = awful.screen.focused().geometry.height
 
+-- Bar
+--------
 
--- Helpers
--------------
-
-local wrap_widget = function(widget)
-    return {
-        widget,
-        margins = dpi(6),
-        widget = wibox.container.margin
+local function boxed_widget(widget)
+    local boxed = wibox.widget{
+        {
+            widget,
+            left = dpi(12),
+            right = dpi(12),
+            widget = wibox.container.margin
+        },
+        bg = beautiful.xcolor0,
+        shape = helpers.rrect(dpi(5)),
+        widget = wibox.container.background
     }
+
+    return boxed
 end
 
+awful.screen.connect_for_each_screen(function(s)
 
--- Wibar
------------
+    -- Tasklist
+    local tasklist_buttons = gears.table.join(
+        -- Left click
+        awful.button({}, 1, function (c)
+            if c == client.focus then
+                c.minimized = true
+            else
+                c:emit_signal("request::activate", "tasklist", {raise = true})
+            end
+        end),
 
-screen.connect_signal("request::desktop_decoration", function(s)
+        -- Middle click
+        awful.button({}, 2, nil, function(c) 
+            c:kill() 
+        end),
 
-    -- Launcher
-    -------------
+        -- Right click
+        awful.button({}, 3, function (c) 
+            c.minimized = not c.minimized 
+        end),
 
-    local awesome_icon = wibox.widget {
-        {
-            widget = wibox.widget.imagebox,
-            image = beautiful.awesome_logo,
-            resize = true
-        },
-        margins = dpi(4),
-        widget = wibox.container.margin
-    }
+        -- Scrolling
+        awful.button({}, 4, function ()
+            awful.client.focus.byidx(-1)
+        end),
+        awful.button({}, 5, function ()
+            awful.client.focus.byidx(1)
+        end)
+    )
 
-    helpers.add_hover_cursor(awesome_icon, "hand2")
-
-
-    -- Battery
-    -------------
-
-    local charge_icon = wibox.widget{
-        bg = beautiful.xcolor8,
-        widget = wibox.container.background,
-        visible = false
-    }
-
-    local batt = wibox.widget{
-        charge_icon,
-        max_value = 100,
-        value = 50,
-        thickness = dpi(4),
-        padding = dpi(2),
-        start_angle = math.pi * 3 / 2,
-        color = {beautiful.xcolor2},
-        bg = beautiful.xcolor2 .. "55",
-        widget = wibox.container.arcchart
-    }
-
-    local batt_last_value = 100
-    local batt_low_value = 40
-    local batt_critical_value = 20
-    awesome.connect_signal("signal::battery", function(value)
-        batt.value = value
-        batt_last_value = value
-        local color
-
-        if charge_icon.visible then
-            color = beautiful.xcolor6
-        elseif value <= batt_critical_value then
-            color = beautiful.xcolor1
-        elseif value <= batt_low_value then
-            color = beautiful.xcolor3
-        else
-            color = beautiful.xcolor2
-        end
-
-        batt.colors = {color}
-        batt.bg = color .. "44"
-    end)
-
-    awesome.connect_signal("signal::charger", function(state)
-        local color
-        if state then
-            charge_icon.visible = true
-            color = beautiful.xcolor6
-        elseif batt_last_value <= batt_critical_value then
-            charge_icon.visible = false
-            color = beautiful.xcolor1
-        elseif batt_last_value <=  batt_low_value then
-            charge_icon.visible = false
-            color = beautiful.xcolor3
-        else
-            charge_icon.visible = false
-            color = beautiful.xcolor2
-        end
-
-        batt.colors = {color}
-        batt.bg = color .. "44"
-    end)
-
-
-    -- Time
-    ----------
-
-    local hour = wibox.widget{
-        font = beautiful.font_name .. "bold 14",
-        format = "%H",
-        align = "center",
-        valign = "center",
-        widget = wibox.widget.textclock
-    }
-
-    local min = wibox.widget{
-        font = beautiful.font_name .. "bold 14",
-        format = "%M",
-        align = "center",
-        valign = "center",
-        widget = wibox.widget.textclock
-    }
-
-    local clock = wibox.widget{
-        {
-            {
-                hour,
-                min,
-                spacing = dpi(5),
-                layout = wibox.layout.fixed.vertical
+    s.mytasklist = awful.widget.tasklist {
+        screen   = s,
+        filter   = awful.widget.tasklist.filter.currenttags,
+        buttons  = tasklist_buttons,
+        layout   = {
+            spacing = dpi(3),
+            spacing_widget = {
+                widget = wibox.container.background
             },
-            top = dpi(5),
-            bottom = dpi(5),
-            widget = wibox.container.margin
-        },
-        bg = beautiful.wibar_widget_bg,
-        shape = helpers.rrect(beautiful.widget_radius),
-        widget = wibox.container.background
-    }
-
-
-    -- Stats
-    -----------
-
-    local stats = wibox.widget{
-        {
-            wrap_widget(batt),
-            clock,
-            spacing = dpi(5),
             layout = wibox.layout.fixed.vertical
         },
-        bg = beautiful.wibar_widget_alt_bg,
-        shape = helpers.rrect(beautiful.widget_radius),
-        widget = wibox.container.background
+        widget_template = {
+            {
+                {
+                    {
+                        id     = 'clienticon',
+                        widget = awful.widget.clienticon
+                    },
+                    margins = dpi(8),
+                    widget  = wibox.container.margin
+                },
+                id            = 'background_role',
+                widget        = wibox.container.background
+            },
+            create_callback = function(self, c, index, objects) --luacheck: no unused args
+                self:get_children_by_id('clienticon')[1].client = c
+
+                -- BLING: Toggle the popup on hover and disable it off hover
+                self:connect_signal('mouse::enter', function()
+                        awesome.emit_signal("bling::task_preview::visibility", s,
+                                            true, c)
+                    end)
+                    self:connect_signal('mouse::leave', function()
+                        awesome.emit_signal("bling::task_preview::visibility", s,
+                                            false, c)
+                    end)
+            end,
+            shape = helpers.rrect(dpi(5)),
+            widget = wibox.container.background
+        }
     }
 
-    stats:connect_signal("mouse::enter", functon()
-        stats.bg = beautiful.xcolor8
-        stats_tooltip_show()
-    end)
-
-    stats:connect_signal("mouse::leave", function()
-        stats.bg = beautiful.wibar_widget_alt_bg
-        stats_tooltip_hide()
-    end)
-
-
-    -- Notification center
-    -------------------------
-
-    notif_center = wibox({
-        type = "dock",
-        screen = screen.primary,
-        height = screen_height - dpi(50),
-        width = dpi(300),
-        bg = beautiful.transparent,
-        ontop = true,
-        visible = false
-    })
-    notif_center.y = dpi(25)
-
-    -- Rubato
-    local slide = rubato.timed{
-        pos = dpi(-300),
-        rate = 60,
-        intro = 0.2,
-        duration = 0.6,
-        easing = rubato.quadratic,
-        awestore_compat = true,
-        subscribed = function(pos)
-            notif_center.x = pos
-        end
-    }
-
-    local notif_center_status = false
-
-    slide.ended:subscribe(function()
-        if notif_center_status then
-            notif_center.visible = false
-        end
-    end)
-
-    -- Make toogle button
-    local notif_center_show = function()
-        notif_center.visible = true
-        slide:set(dpi(100))
-        notif_center_status = false
-    end
-
-    local notif_center_hide = function()
-        slide:set(dpi(-375))
-        notif_center_status = true
-    end
-
-    notif_center_toggle = function()
-        if notif_center.visible then
-            notif_center_hide()
-        else
-            notif_center_show()
-        end
-    end
-
-    -- notif_center setup
-    s.notif_center = require('ui.widgets.notif-center')(s)
-
-    notif_center:setup {
-        {
-            s.notif_center,
-            margins = dpi(15),
-            widget = wibox.container.margin
-        },
-        bg = beautiful.xbackground,
-        shape = helpers.rrect(beautiful.notif_center_radius),
-        widget = wibox.container.background
-    }
-
-    local notif_center_button = wibox.widget{
-        markup = helpers.colorize_text("", beautiful.accent),
-        font = beautiful.font_name .. "18",
-        align = "center",
-        valign = "center",
-        widget = wibox.widget.textbox
-    }
-
-    notif_center_button:connect_signal("mouse::enter", function()
-        notif_center_button.markup = helpers.colorize_text(notif_center_button.text, beautiful.accent .. 55)
-    end)
-
-    notif_center_button:connect_signal("mouse::leave", function()
-        notif_center_button.markup = helpers.colorize_text(notif_center_button.text, beautiful.accent)
-    end)
-
-    notif_center_button:buttons(gears.table.join(
-        awful.button({}, 1, function()
-            notif_center_toggle()
-        end)
-    ))
-    helpers.add_hover_cursor(notif_center_button, "hand2")
-
-
--- Setup wibar
------------------
-
-    -- Create a promptbox for each screen
-    s.mypromptbox = awful.widget.prompt()
+    local tasklist = wibox.container.background(s.mytasklist)
 
     -- Layoutbox
     local layoutbox_buttons = gears.table.join(
-    -- Left click
-    awful.button({}, 1, function (c)
-        awful.layout.inc(1)
-    end),
+        -- Left click
+        awful.button({}, 1, function (c)
+            awful.layout.inc(1)
+        end),
 
-    -- Right click
-    awful.button({}, 3, function (c) 
-        awful.layout.inc(-1) 
-    end),
+        -- Right click
+        awful.button({}, 3, function (c) 
+            awful.layout.inc(-1) 
+        end),
 
-    -- Scrolling
-    awful.button({}, 4, function ()
-        awful.layout.inc(-1)
-    end),
-    awful.button({}, 5, function ()
-        awful.layout.inc(1)
-    end)
+        -- Scrolling
+        awful.button({}, 4, function ()
+            awful.layout.inc(-1)
+        end),
+        awful.button({}, 5, function ()
+            awful.layout.inc(1)
+        end)
     )
 
     s.mylayoutbox = awful.widget.layoutbox(s)
@@ -304,91 +133,242 @@ screen.connect_signal("request::desktop_decoration", function(s)
 
     local layoutbox = wibox.widget{
         s.mylayoutbox,
-        margins = {bottom = dpi(7), left = dpi(8), right = dpi(8)},
+        margins = dpi(8),
         widget = wibox.container.margin
     }
 
-    helpers.add_hover_cursor(layoutbox, "hand2")
+    -- Start
+    local start = wibox.widget{
+        markup = "",
+        font = beautiful.icon_font_name .. "Round 12",
+        align = "center",
+        valign = "center",
+        widget = wibox.widget.textbox
+    }
 
+    start:butons(gears.table.join(
+        awful.button({}, 1, function ()
+            awful.spawn(launcher)
+        end)
+    ))
 
-    -- Create the wibar
+    -- Wifi
+    local wifi = wibox.widget{
+        markup = "",
+        font = beautiful.icon_font_name .. "Round 12",
+        align = "center",
+        valign = "center",
+        widget = wibox.widget.textbox
+    }
+
+    awesome.connect_signal("signal::network", function(status, _)
+        local w = ""
+
+        if status then
+            w = ""
+        end
+
+        wifi.markup = w
+    end)
+
+    -- Volume
+    local vol = wibox.widget{
+        markup = "",
+        font = beautiful.icon_font_name .. "Round 12",
+        align = "center",
+        valign = "center",
+        widget = wibox.widget.textbox
+    }
+
+    awesome.connect_signal("signal::volume", function(value, muted)
+        local fill_color = beautiful.xcolor4
+        local vol_value = value or 0
+        local v = ""
+
+        if muted then
+            fill_color = beautiful.xcolor8
+            v = ""
+        else
+            if vol_value >= 60 then
+                v = ""
+            elseif vol_value >= 20 and vol_value < 60 then
+                v = ""
+            else
+                v = ""
+            end
+        end
+
+        vol.markup = v
+    end)
+
+    vol:buttons(gears.table.join(
+        awful.button({}, 1, function ()
+            helpers.volume_control(0)
+        end),
+        awful.button({}, 4, function ()
+            helpers.volume_control(2)
+        end),
+        awful.button({}, 5, function ()
+            helpers.volume_control(-2)
+        end)
+    ))
+
+    -- Battery
+    local batt = wibox.widget{
+        markup = helpers.colorize_text("", beautiful.xcolor1),
+        font = beautiful.icon_font_name .. "Round 12",
+        align = "center",
+        valign = "center",
+        widget = wibox.widget.textbox
+    }
+
+    local batt_val = 0
+    local batt_charger
+
+    awesome.connect_signal("signal::battery", function(value)
+        batt_val = value
+        awesome.emit_signal("widget::battery")
+    end)
+
+    awesome.connect_signal("signal::charger", function(state)
+        batt_charger = state
+        awesome.emit_signal("widget::battery")
+    end)
+
+    awesome.connect_signal("widget::battery", function()
+        local b = ""
+        local fill_color = beautiful.xforeground
+
+        if batt_val >= 88 and batt_val <= 100 then
+            b = ""
+        elseif batt_val >= 76 and batt_val < 88 then
+            b = ""
+        elseif batt_val >= 64 and batt_val < 76 then
+            b = ""
+        elseif batt_val >= 52 and batt_val < 64 then
+            b = ""
+        elseif batt_val >= 40 and batt_val < 52 then
+            b = ""
+        elseif batt_val >= 28 and batt_val < 40 then
+            b = ""
+        elseif batt_val >= 16 and batt_val < 28 then
+            b = ""
+        else
+            b = ""
+        end
+
+        if batt_charger then
+            fill_color = beautiful.xcolor2 .. "d5"
+        else
+            if batt_val <= 15 then
+                fill_color = beautiful.xcolor1
+            end
+        end
+
+        batt.markup = helpers.colorize_text(b, fill_color)
+    end)
+
+    local stats = wibox.widget {
+        {
+            {
+                wifi,
+                vol,
+                batt,
+                spacing = dpi(18),
+                layout = wibox.layout.fixed.vertical
+            },
+            top = dpi(8),
+            bottom = dpi(8),
+            widget = wibox.container.margin
+        },
+        shape = helpers.rrect(dpi(5)),
+        widget = wibox.container.background
+    }
+
+    stats:connect_signal("mouse::enter", function()
+        stats.bg = beautiful.bg_secondary
+        stats_tooltip.visible = true
+    end)
+
+    stats:connect_signal("mouse::leave", function()
+        stats.bg = beautiful.transparent
+        stats_tooltip.visible = false
+    end)
+
+    -- Time
+    local time_hour = wibox.widget{
+        font = beautiful.font_name .. "bold 12",
+        format = "%H",
+        align = "center",
+        valign = "center",
+        widget = wibox.widget.textclock
+    }
+
+    local time_min = wibox.widget{
+        font = beautiful.font_name .. "bold 12",
+        format = "%M",
+        align = "center",
+        valign = "center",
+        widget = wibox.widget.textclock
+    }
+
+    local time = wibox.widget{
+        time_hour,
+        time_min,
+        spacing = dpi(5),
+        layout = wibox.layout.fixed.vertical
+    }
+
+    time:connect_signal("mouse::enter", function()
+        cal_tooltip_show()
+    end)
+
+    time:connect_signal("mouse::leave", function()
+        cal_tooltip_hide()
+    end)
+
+    -- Separator
+    local separator = wibox.widget {
+        color = beautiful.separator_color,
+        forced_height = dpi(2),
+        shape = gears.shape.rounded_bar,
+        widget = wibox.widget.separator
+    }
+
+    -- Wibar
     s.mywibar = awful.wibar({
         type = "dock",
-        position = "left",
         screen = s,
-        height = awful.screen.focused().geometry.height - dpi(50),
-        width = dpi(50),
-        bg = beautiful.transparent,
-        ontop = true,
+        position = beautiful.wibar_pos,
         visible = true
     })
 
-    awesome_icon:buttons(gears.table.join(
-    awful.button({}, 1, function ()
-        dashboard_toggle()
-    end)
-    ))
-
-    -- Remove wibar on full screen
-    local function remove_wibar(c)
-        if c.fullscreen or c.maximized then
-            c.screen.mywibar.visible = false
-        else
-            c.screen.mywibar.visible = true
-        end
-    end
-
-    -- Remove wibar on full screen
-    local function add_wibar(c)
-        if c.fullscreen or c.maximized then
-            c.screen.mywibar.visible = true
-        end
-    end
-
-    client.connect_signal("property::fullscreen", remove_wibar)
-
-    client.connect_signal("request::unmanage", add_wibar)
-
-     -- Create the taglist widget
-    s.mytaglist = require("ui.widgets.pacman-taglist")(s)
-
-    local taglist = wibox.widget{
-        s.mytaglist,
-        shape = beautiful.taglist_shape_focus,
-        bg = beautiful.wibar_widget_alt_bg,
-        widget = wibox.container.background
-    }
-
     -- Add widgets to wibar
-    s.mywibar:setup {
+    s.mywibar:setup{
         {
+            start,
             {
-                layout = wibox.layout.align.vertical,
-                expand = "none",
-                { -- top
-                    awesome_icon,
-                    taglist,
-                    spacing = dpi(10),
-                    layout = wibox.layout.fixed.vertical
-                },
-                -- middle
-                nil,
-                { -- bottom
-                    stats,
-                    notif_center_button,
-                    layoutbox,
-                    spacing = dpi(8),
-                    layout = wibox.layout.fixed.vertical
-                }
+                tasklist,
+                top = dpi(10),
+                bottom = dpi(5),
+                widget = wibox.container.margin
             },
-            margins = dpi(8),
-            widget = wibox.container.margin
+            {
+                stats,
+                separator,
+                time,
+                separator,
+                layoutbox,
+                spacing = dpi(10),
+                layout = wibox.layout.fixed.vertical
+            },
+            layout = wibox.layout.align.vertical
         },
-        bg = beautiful.wibar_bg,
-        shape = helpers.rrect(beautiful.border_radius),
-        widget = wibox.container.background
+        left = dpi(4),
+        right = dpi(4),
+        top = dpi(10),
+        bottom = dpi(10),
+        widget = wibox.container.margin
     }
-
-    -- wibar position
-    s.mywibar.x = dpi(25)
 end)
+t
