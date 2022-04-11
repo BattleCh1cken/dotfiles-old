@@ -14,6 +14,7 @@ local themes_path = "/usr/share/awesome/theme"
 local theme = {}
 
 theme.font          = "JetBrains Mono Nerd Font 8"
+theme.icon_font_name = "JetBrains Mono Nerd Font 8"
 
 theme.xbackground = xrdb.background
 theme.xforeground = xrdb.foreground

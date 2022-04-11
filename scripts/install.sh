@@ -1,5 +1,4 @@
 #!/bin/bash
-
 installYay(){
   cd ~
   git clone "https://aur.archlinux.org/yay.git"
@@ -35,9 +34,10 @@ installPackages(){
 
 linkDotfiles(){
 sh ~/dotfiles/scripts/link.sh
-#Clone awesome dependencies
-git clone https://github.com/BlingCorp/bling.git ~/.config/awesome/module/bling
-git clone https://github.com/andOrlando/rubato.git ~/.config/awesome/module/rubato
+#pull submodules
+cd ~/dotfiles/
+git submodules init
+git submodules update
 }
 
 echo -ne "

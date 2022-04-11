@@ -12,6 +12,7 @@ require("awful.autofocus")
 local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
+dpi = beautiful.xresources.apply_dpi
 -- Notification library
 local naughty = require("naughty")
 -- Declarative object management

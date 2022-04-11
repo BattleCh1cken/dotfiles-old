@@ -31,22 +31,6 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 
-local battery = wibox.widget {
-    {
-        {
-            value = 50,
-            widget = wibox.widget.textbox
-        },
-        layout = wibox.layout.fixed.vertical
-    },
-    bg = "#ff0000",
-    widget = wibox.container.background
-}
-
- awesome.connect_signal("signal::battery", function(value)
-                battery.value = value
-    end)
-
 mykeyboardlayout = awful.widget.keyboardlayout()
 
 mytextclock = wibox.widget.textclock("%c")
