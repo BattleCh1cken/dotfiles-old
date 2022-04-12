@@ -29,7 +29,7 @@ installNVChad(){
   fi
 }
 installPackages(){
-  yay -S --noconfirm --needed awesome-git kitty rofi picom neovim ripgrep zsh zsh-autosuggestions zsh-syntax-highlighting zoxide starship exa playerctl acpi
+  yay -S --noconfirm --needed awesome-git kitty rofi picom neovim ripgrep zsh zsh-autosuggestions zsh-syntax-highlighting zoxide starship exa playerctl brightnessctl acpi
 }
 
 linkDotfiles(){

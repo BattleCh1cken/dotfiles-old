@@ -1,64 +1,140 @@
+-- helpers.lua
 -- Functions that you use more than once and in different files would
 -- be nice to define here.
-
 local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
-local xresources = require("beautiful.xresources")
-local dpi = xresources.apply_dpi
 local wibox = require("wibox")
 local naughty = require("naughty")
-
 local helpers = {}
 
+function helpers.contains(_table, _c)
+	for _, c in ipairs(_table) do
+		if _c == c then
+			return true
+		end
+	end
+	return false
+end
 
--- Helpers
----------------------------
+function helpers.find(rule)
+    local function matcher(c) return awful.rules.match(c, rule) end
+    local clients = client.get()
+    local findex = gears.table.hasitem(clients, client.focus) or 1
+    local start = gears.math.cycle(#clients, findex + 1)
+
+    local matches = {}
+    for c in awful.client.iterate(matcher, start) do
+        matches[#matches + 1] = c
+    end
+
+    return matches
+end
+
+-- Adds a maximized mask to a screen
+function helpers.screen_mask(s, bg)
+    local mask = wibox({
+        visible = false,
+        ontop = true,
+        type = "splash",
+        screen = s
+    })
+    awful.placement.maximize(mask)
+    mask.bg = bg
+    return mask
+end
+
+function helpers.custom_shape(cr, width, height)
+    cr:move_to(0, height / 25)
+    cr:line_to(height / 25, 0)
+    cr:line_to(width, 0)
+    cr:line_to(width, height - height / 25)
+    cr:line_to(width - height / 25, height)
+    cr:line_to(0, height)
+    cr:close_path()
+end
+
+-- Resize gaps on the fly
+
+helpers.resize_gaps = function(amt)
+    local t = awful.screen.focused().selected_tag
+    t.gap = t.gap + tonumber(amt)
+    awful.layout.arrange(awful.screen.focused())
+end
+
+-- Resize padding on the fly
+
+helpers.resize_padding = function(amt)
+    local s = awful.screen.focused()
+    local l = s.padding.left
+    local r = s.padding.right
+    local t = s.padding.top
+    local b = s.padding.bottom
+    s.padding = {
+        left = l + amt,
+        right = r + amt,
+        top = t + amt,
+        bottom = b + amt
+    }
+    awful.layout.arrange(awful.screen.focused())
+end
 
 -- Create rounded rectangle shape (in one line)
+
 helpers.rrect = function(radius)
     return function(cr, width, height)
         gears.shape.rounded_rect(cr, width, height, radius)
     end
 end
 
+-- Create pi
+
+helpers.pie = function(width, height, start_angle, end_angle, radius)
+    return function(cr)
+        gears.shape.pie(cr, width, height, start_angle, end_angle, radius)
+    end
+end
+
+-- Create parallelogram
+
+helpers.prgram = function(height, base)
+    return function(cr, width)
+        gears.shape.parallelogram(cr, width, height, base)
+    end
+end
+
+-- Create partially rounded rect
+
 helpers.prrect = function(radius, tl, tr, br, bl)
     return function(cr, width, height)
-        gears.shape.partially_rounded_rect(cr, width, height, tl, tr, br, bl, radius)
+        gears.shape.partially_rounded_rect(cr, width, height, tl, tr, br, bl,
+                                           radius)
     end
 end
 
-helpers.squircle = function(rate, delta)
-    return function(cr, width, height)
-        gears.shape.squircle(cr, width, height, rate, delta)
+-- Create rounded bar
+
+helpers.rbar = function(width, height)
+    return function(cr)
+        gears.shape.rounded_bar(cr, width, height)
     end
 end
 
-helpers.psquircle = function(rate, delta, tl, tr, br, bl)
-    return function(cr, width, height)
-        gears.shape.partial_squircle(cr, width, height, tl, tr, br, bl, rate, delta)
-    end
-end
+-- Markup helper
 
-helpers.ibubble = function(radius, arrow_size, arrow_position)
-    return function(cr, width, height)
-        gears.shape.infobubble(cr, width, height, radius, arrow_size, arrow_position)
-    end
-end
-
-helpers.colorize_text = function(text, color)
-    return "<span foreground='"..color.."'>"..text.."</span>"
+function helpers.colorize_text(txt, fg)
+    return "<span foreground='" .. fg .. "'>" .. txt .. "</span>"
 end
 
 function helpers.client_menu_toggle()
     local instance = nil
 
-    return function ()
+    return function()
         if instance and instance.wibox.visible then
             instance:hide()
             instance = nil
         else
-            instance = awful.menu.clients({ theme = { width = dpi(250) } })
+            instance = awful.menu.clients({theme = {width = dpi(250)}})
         end
     end
 end
@@ -67,40 +143,77 @@ end
 -- tags. Modified from:
 -- https://github.com/kernelsauce/turbo/blob/master/turbo/escape.lua
 function helpers.pango_escape(s)
-    return (string.gsub(s, "[&<>]", {
-        ["&"] = "&amp;",
-        ["<"] = "&lt;",
-        [">"] = "&gt;"
-    }))
+    return (string.gsub(s, "[&<>]",
+                        {["&"] = "&amp;", ["<"] = "&lt;", [">"] = "&gt;"}))
 end
 
 function helpers.vertical_pad(height)
-    return wibox.widget{
+    return wibox.widget {
         forced_height = height,
         layout = wibox.layout.fixed.vertical
     }
 end
 
 function helpers.horizontal_pad(width)
-    return wibox.widget{
+    return wibox.widget {
         forced_width = width,
         layout = wibox.layout.fixed.horizontal
     }
 end
 
-local direction_translate = {
-    ['up'] = 'top',
-    ['down'] = 'bottom',
-    ['left'] = 'left',
-    ['right'] = 'right'
-}
+-- Maximizes client and also respects gaps
+function helpers.maximize(c)
+    c.maximized = not cmaximized
+    if c.maximized then
+        awful.placement.maximize(c, {
+            honor_padding = true,
+            honor_workarea = true,
+            margins = beautiful.useless_gap * 2
+        })
+
+    end
+    c:raise()
+end
+
 function helpers.move_to_edge(c, direction)
-    local old = c:geometry()
-    local new = awful.placement[direction_translate[direction]](c, {honor_padding = true, honor_workarea = true, margins = beautiful.useless_gap * 2, pretend = true})
-    if direction == "up" or direction == "down" then
-        c:geometry({ x = old.x, y = new.y })
-    else
-        c:geometry({ x = new.x, y = old.y })
+    -- local workarea = awful.screen.focused().workarea
+    -- local client_geometry = c:geometry()
+    if direction == "up" then
+        local old_x = c:geometry().x
+        awful.placement.top(c, {
+            honor_padding = true,
+            honor_workarea = true,
+            honor_padding = true
+        })
+        c.x = old_x
+        -- c:geometry({ nil, y = workarea.y + beautiful.screen_margin * 2, nil, nil })
+    elseif direction == "down" then
+        local old_x = c:geometry().x
+        awful.placement.bottom(c, {
+            honor_padding = true,
+            honor_workarea = true,
+            honor_padding = true
+        })
+        c.x = old_x
+        -- c:geometry({ nil, y = workarea.height + workarea.y - client_geometry.height - beautiful.screen_margin * 2 - beautiful.border_width * 2, nil, nil })
+    elseif direction == "left" then
+        local old_y = c:geometry().y
+        awful.placement.left(c, {
+            honor_padding = true,
+            honor_workarea = true,
+            honor_padding = true
+        })
+        c.y = old_y
+        -- c:geometry({ x = workarea.x + beautiful.screen_margin * 2, nil, nil, nil })
+    elseif direction == "right" then
+        local old_y = c:geometry().y
+        awful.placement.right(c, {
+            honor_padding = true,
+            honor_workarea = true,
+            honor_padding = true
+        })
+        c.y = old_y
+        -- c:geometry({ x = workarea.width + workarea.x - client_geometry.width - beautiful.screen_margin * 2 - beautiful.border_width * 2, nil, nil, nil })
     end
 end
 
@@ -114,54 +227,45 @@ function helpers.single_double_tap(single_tap_function, double_tap_function)
         return
     end
 
-    double_tap_timer =
-        gears.timer.start_new(0.20, function()
-            double_tap_timer = nil
-            -- naughty.notify({text = "We got a single tap"})
-            if single_tap_function then
-                single_tap_function()
-            end
-            return false
-        end)
+    double_tap_timer = gears.timer.start_new(0.20, function()
+        double_tap_timer = nil
+        -- naughty.notify({text = "We got a single tap"})
+        if single_tap_function then single_tap_function() end
+        return false
+    end)
 end
-
 
 -- Used as a custom command in rofi to move a window into the current tag
 -- instead of following it.
 -- Rofi has access to the X window id of the client.
 function helpers.rofi_move_client_here(window)
-    local win = function (c)
-        return awful.rules.match(c, {window = window})
-    end
+    local win = function(c) return awful.rules.match(c, {window = window}) end
 
     for c in awful.client.iterate(win) do
         c.minimized = false
         c:move_to_tag(mouse.screen.selected_tag)
         client.focus = c
+        c:raise()
     end
 end
 
 -- Add a hover cursor to a widget by changing the cursor on
 -- mouse::enter and mouse::leave
--- You can find he names of the available cursors by opening any
+-- You can find the names of the available cursors by opening any
 -- cursor theme and looking in the "cursors folder"
 -- For example: "hand1" is the cursor that appears when hovering over
 -- links
 function helpers.add_hover_cursor(w, hover_cursor)
     local original_cursor = "left_ptr"
 
-    w:connect_signal("mouse::enter", function ()
+    w:connect_signal("mouse::enter", function()
         local w = _G.mouse.current_wibox
-        if w then
-            w.cursor = hover_cursor
-        end
+        if w then w.cursor = hover_cursor end
     end)
 
-    w:connect_signal("mouse::leave", function ()
+    w:connect_signal("mouse::leave", function()
         local w = _G.mouse.current_wibox
-        if w then
-            w.cursor = original_cursor
-        end
+        if w then w.cursor = original_cursor end
     end)
 end
 
@@ -170,6 +274,10 @@ end
 -- Useful for quick switching after for example checking an incoming chat
 -- message at tag 2 and coming back to your work at tag 1 with the same
 -- keypress.
+-- Also focuses urgent clients if they exist in the tag. This fixes the issue
+-- (visual mismatch) where after switching to a tag which includes an urgent
+-- client, the urgent client is unfocused but still covers all other windows
+-- (even the currently focused window).
 function helpers.tag_back_and_forth(tag_index)
     local s = mouse.screen
     local tag = s.tags[tag_index]
@@ -179,6 +287,15 @@ function helpers.tag_back_and_forth(tag_index)
         else
             tag:view_only()
         end
+
+        local urgent_clients = function(c)
+            return awful.rules.match(c, {urgent = true, first_tag = tag})
+        end
+
+        for c in awful.client.iterate(urgent_clients) do
+            client.focus = c
+            c:raise()
+        end
     end
 end
 
@@ -186,29 +303,56 @@ end
 -- Resize client or factor
 -- Constants --
 local floating_resize_amount = dpi(20)
-local tiling_resize_factor= 0.05
+local tiling_resize_factor = 0.05
 ---------------
-function helpers.resize_client(c, direction)
-    if c and c.floating or awful.layout.get(mouse.screen) == awful.layout.suit.floating then
+function helpers.resize_dwim(c, direction)
+    if awful.layout.get(mouse.screen) == awful.layout.suit.floating or
+        (c and c.floating) then
         if direction == "up" then
-            c:relative_move(  0,  0, 0, -floating_resize_amount)
+            c:relative_move(0, 0, 0, -floating_resize_amount)
         elseif direction == "down" then
-            c:relative_move(  0,  0, 0,  floating_resize_amount)
+            c:relative_move(0, 0, 0, floating_resize_amount)
         elseif direction == "left" then
-            c:relative_move(  0,  0, -floating_resize_amount, 0)
+            c:relative_move(0, 0, -floating_resize_amount, 0)
         elseif direction == "right" then
-            c:relative_move(  0,  0,  floating_resize_amount, 0)
+            c:relative_move(0, 0, floating_resize_amount, 0)
         end
-    elseif awful.layout.get(mouse.screen) ~= awful.layout.suit.floating then
+    else
         if direction == "up" then
             awful.client.incwfact(-tiling_resize_factor)
         elseif direction == "down" then
-            awful.client.incwfact( tiling_resize_factor)
+            awful.client.incwfact(tiling_resize_factor)
         elseif direction == "left" then
             awful.tag.incmwfact(-tiling_resize_factor)
         elseif direction == "right" then
-            awful.tag.incmwfact( tiling_resize_factor)
+            awful.tag.incmwfact(tiling_resize_factor)
         end
+    end
+end
+
+-- Move client to screen edge, respecting the screen workarea
+function helpers.move_to_edge(c, direction)
+    local workarea = awful.screen.focused().workarea
+    if direction == "up" then
+        c:geometry({nil, y = workarea.y + beautiful.useless_gap * 2, nil, nil})
+    elseif direction == "down" then
+        c:geometry({
+            nil,
+            y = workarea.height + workarea.y - c:geometry().height -
+                beautiful.useless_gap * 2 - beautiful.border_width * 2,
+            nil,
+            nil
+        })
+    elseif direction == "left" then
+        c:geometry({x = workarea.x + beautiful.useless_gap * 2, nil, nil, nil})
+    elseif direction == "right" then
+        c:geometry({
+            x = workarea.width + workarea.x - c:geometry().width -
+                beautiful.useless_gap * 2 - beautiful.border_width * 2,
+            nil,
+            nil,
+            nil
+        })
     end
 end
 
@@ -216,8 +360,9 @@ end
 -- Move to edge if the client / layout is floating
 -- Swap by index if maximized
 -- Else swap client by direction
-function helpers.move_client(c, direction)
-    if c.floating or (awful.layout.get(mouse.screen) == awful.layout.suit.floating) then
+function helpers.move_client_dwim(c, direction)
+    if c.floating or
+        (awful.layout.get(mouse.screen) == awful.layout.suit.floating) then
         helpers.move_to_edge(c, direction)
     elseif awful.layout.get(mouse.screen) == awful.layout.suit.max then
         if direction == "up" or direction == "left" then
@@ -231,21 +376,50 @@ function helpers.move_client(c, direction)
 end
 
 -- Make client floating and snap to the desired edge
-local axis_translate = {
-    ['up'] = 'horizontally',
-    ['down'] = 'horizontally',
-    ['left'] = 'vertically',
-    ['right'] = 'vertically'
-}
 function helpers.float_and_edge_snap(c, direction)
-    c.maximized = false
-    c.maximized_vertical = false
-    c.maximized_horizontal = false
+    -- if not c.floating then
+    --     c.floating = true
+    -- end
+    naughty.notify({text = "double tap"})
     c.floating = true
-    local f = awful.placement.scale
-        + awful.placement[direction_translate[direction]]
-        + awful.placement['maximize_'..axis_translate[direction]]
-    f(c, {honor_padding = true, honor_workarea=true, to_percent = 0.5, margins = beautiful.useless_gap * 2 })
+    local workarea = awful.screen.focused().workarea
+    if direction == "up" then
+        local axis = 'horizontally'
+        local f = awful.placement.scale + awful.placement.top +
+                      (axis and awful.placement['maximize_' .. axis] or nil)
+        local geo = f(client.focus, {
+            honor_padding = true,
+            honor_workarea = true,
+            to_percent = 0.5
+        })
+    elseif direction == "down" then
+        local axis = 'horizontally'
+        local f = awful.placement.scale + awful.placement.bottom +
+                      (axis and awful.placement['maximize_' .. axis] or nil)
+        local geo = f(client.focus, {
+            honor_padding = true,
+            honor_workarea = true,
+            to_percent = 0.5
+        })
+    elseif direction == "left" then
+        local axis = 'vertically'
+        local f = awful.placement.scale + awful.placement.left +
+                      (axis and awful.placement['maximize_' .. axis] or nil)
+        local geo = f(client.focus, {
+            honor_padding = true,
+            honor_workarea = true,
+            to_percent = 0.5
+        })
+    elseif direction == "right" then
+        local axis = 'vertically'
+        local f = awful.placement.scale + awful.placement.right +
+                      (axis and awful.placement['maximize_' .. axis] or nil)
+        local geo = f(client.focus, {
+            honor_padding = true,
+            honor_workarea = true,
+            to_percent = 0.5
+        })
+    end
 end
 
 -- Rounds a number to any number of decimals
@@ -254,120 +428,13 @@ function helpers.round(number, decimals)
     return math.floor(number * power) / power
 end
 
-function helpers.set_volume(value)
-    local cmd = "pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ "..tostring(value).."%"
-    -- if step == 0 then
-    --     cmd = "pactl set-sink-mute @DEFAULT_SINK@ toggle"
-    -- else
-    --     sign = step > 0 and "+" or ""
-    --     cmd = "pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ "..sign..tostring(step).."%"
-    -- end
-    awful.spawn.with_shell(cmd)
-end
-
-function helpers.volume_control(step)
-    local cmd
-    if step == 0 then
-        cmd = "pactl set-sink-mute @DEFAULT_SINK@ toggle"
-    else
-        sign = step > 0 and "+" or ""
-        cmd = "pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ "..sign..tostring(step).."%"
-    end
-    awful.spawn.with_shell(cmd)
-end
-
-function helpers.music_control(state)
-    local cmd
-    if state == "toggle" then
-        cmd = "playerctl -p spotify,mpd play-pause"
-    elseif state == "prev" then
-        cmd = "playerctl -p spotify,mpd previous"
-    elseif state == "next" then
-        cmd = "playerctl -p spotify,mpd next"
-    end
-    awful.spawn.with_shell(cmd)
-end
-
-function helpers.send_key(c, key)
-    awful.spawn.with_shell("xdotool key --window "..tostring(c.window).." "..key)
-end
-
-function helpers.send_key_sequence(c, seq)
-    awful.spawn.with_shell("xdotool type --delay 5 --window "..tostring(c.window).." "..seq)
-end
-
 function helpers.fake_escape()
     root.fake_input('key_press', "Escape")
     root.fake_input('key_release', "Escape")
 end
 
-local prompt_font = beautiful.font
-function helpers.prompt(action, textbox, prompt, callback)
-    if action == "run" then
-        awful.prompt.run {
-            -- prompt       = prompt,
-            -- prompt       = "<b>Run: </b>",
-            textbox      = textbox,
-            font = prompt_font,
-            done_callback = callback,
-            exe_callback = awful.spawn,
-            completion_callback = awful.completion.shell,
-            history_path = awful.util.get_cache_dir() .. "/history"
-        }
-    elseif action == "web_search" then
-        awful.prompt.run {
-            -- prompt       = prompt,
-            -- prompt       = '<b>Web search: </b>',
-            textbox      = textbox,
-            font = prompt_font,
-            history_path = awful.util.get_cache_dir() .. "/history_web",
-            done_callback = callback,
-            exe_callback = function(input)
-                if not input or #input == 0 then return end
-                awful.spawn.with_shell("noglob "..browser.."'"..input.."'")
-                naughty.notify { title = "Searching the web for", text = input, icon = icons.image.firefox, urgency = "low" }
-            end
-        }
-    end
-end
-
--- Given a `match` condition, returns an array with clients that match it, or
--- just the first found client if `first_only` is true
-function helpers.find_clients(match, first_only)
-    local matcher = function (c)
-        return awful.rules.match(c, match)
-    end
-
-    if first_only then
-        for c in awful.client.iterate(matcher) do
-            return c
-        end
-    else
-        local clients = {}
-        for c in awful.client.iterate(matcher) do
-            table.insert(clients, c)
-        end
-        return clients
-    end
-    return nil
-end
-
--- Given a `match` condition, calls the specified function `f_do` on all the
--- clients that match it
-function helpers.find_clients_and_do(match, f_do)
-    local matcher = function (c)
-        return awful.rules.match(c, match)
-    end
-
-    for c in awful.client.iterate(matcher) do
-        f_do(c)
-    end
-end
-
 function helpers.run_or_raise(match, move, spawn_cmd, spawn_args)
-    local matcher = function (c)
-        return awful.rules.match(c, match)
-    end
+    local matcher = function(c) return awful.rules.match(c, match) end
 
     -- Find and raise
     local found = false
@@ -377,6 +444,7 @@ function helpers.run_or_raise(match, move, spawn_cmd, spawn_args)
         if move then
             c:move_to_tag(mouse.screen.selected_tag)
             client.focus = c
+            c:raise()
         else
             c:jump_to()
         end
@@ -384,41 +452,29 @@ function helpers.run_or_raise(match, move, spawn_cmd, spawn_args)
     end
 
     -- Spawn if not found
-    if not found then
-        awful.spawn(spawn_cmd, spawn_args)
-    end
+    if not found then awful.spawn(spawn_cmd, spawn_args) end
 end
 
--- Run raise or minimize a client (scratchpad style)
--- Depends on helpers.run_or_raise
--- If it not running, spawn it
--- If it is running, focus it
--- If it is focused, minimize it
-function helpers.scratchpad(match, spawn_cmd, spawn_args)
-    local cf = client.focus
-    if cf and awful.rules.match(cf, match) then
-        cf.minimized = true
-    else
-        helpers.run_or_raise(match, true, spawn_cmd, spawn_args)
-    end
+function helpers.pad(size)
+    local str = ""
+    for i = 1, size do str = str .. " " end
+    local pad = wibox.widget.textbox(str)
+    return pad
 end
 
 function helpers.float_and_resize(c, width, height)
-    c.maximized = false
     c.width = width
     c.height = height
-    awful.placement.centered(c,{honor_workarea=true, honor_padding = true})
+    awful.placement.centered(c, {honor_workarea = true, honor_padding = true})
     awful.client.property.set(c, 'floating_geometry', c:geometry())
     c.floating = true
     c:raise()
 end
 
--- Adds a maximized mask to a screen
-function helpers.screen_mask(s, bg)
-    local mask = wibox({visible = false, ontop = true, type = "splash", screen = s})
-    awful.placement.maximize(mask)
-    mask.bg = bg
-    return mask
+function helpers.centered_client_placement(c)
+    return gears.timer.delayed_call(function ()
+        awful.placement.centered(c, {honor_padding = true, honor_workarea=true})
+    end)
 end
 
 -- Useful for periodically checking the output of a command that
@@ -468,31 +524,36 @@ function helpers.remote_watch(command, interval, output_file, callback)
     }
 end
 
--- The directory of the currently executed lua script
--- Requires the `debug` library to be available in the build of Lua that is running
-function helpers.this_dir()
-   local str = debug.getinfo(2, "S").source:sub(2)
-   return str:match("(.*/)")
-end
-
--- Determines how floating clients should be placed
-function helpers.floating_client_placement(c)
-    -- If the layout is floating or there are no other visible
-    -- clients, center client
-    if awful.layout.get(mouse.screen) ~= awful.layout.suit.floating or #mouse.screen.clients == 1 then
-        return awful.placement.centered(c,{honor_padding = true, honor_workarea=true})
+-- Volume Control
+function helpers.volume_control(step)
+    local cmd
+    if step == 0 then
+        cmd = "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+    else
+        sign = step > 0 and "+" or ""
+        cmd = "pactl set-sink-mute @DEFAULT_SINK@ 0 && pactl set-sink-volume @DEFAULT_SINK@ "..sign..tostring(step).."%"
     end
-
-    -- Else use this placement
-    local p = awful.placement.no_overlap + awful.placement.no_offscreen
-    return p(c, {honor_padding = true, honor_workarea=true, margins = beautiful.useless_gap * 2})
+    awful.spawn.with_shell(cmd)
 end
 
-function helpers.centered_client_placement(c)
-    return gears.timer.delayed_call(function ()
-        awful.placement.centered(c, {honor_padding = true, honor_workarea=true})
-    end)
+function helpers.music_control(state)
+    local cmd
+    if state == "toggle" then
+        cmd = "playerctl -p spotify,mpd play-pause"
+    elseif state == "prev" then
+        cmd = "playerctl -p spotify,mpd previous"
+    elseif state == "next" then
+        cmd = "playerctl -p spotify,mpd next"
+    end
+    awful.spawn.with_shell(cmd)
 end
 
--- Set titlebar visibility
+function helpers.send_key(c, key)
+    awful.spawn.with_shell("xdotool key --window "..tostring(c.window).." "..key)
+end
+
+function helpers.send_key_sequence(c, seq)
+    awful.spawn.with_shell("xdotool type --delay 5 --window "..tostring(c.window).." "..seq)
+end
+
 return helpers

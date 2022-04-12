@@ -7,8 +7,6 @@ local wibox = require("wibox")
 
 -- Theme handling library
 local beautiful = require("beautiful")
-local xresources = require("beautiful.xresources")
-local dpi = xresources.apply_dpi
 
 local menubar = require("menubar")
 -- Create a launcher widget and a main menu
@@ -102,7 +100,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
             s.mytasklist, -- Middle widget
             { -- Right widgets
                 layout = wibox.layout.fixed.horizontal,
-                battery,
                 mykeyboardlayout,
                 wibox.widget.systray(),
                 mytextclock,

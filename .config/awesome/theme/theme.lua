@@ -7,50 +7,74 @@ local xresources = require("beautiful.xresources")
 local rnotification = require("ruled.notification")
 local dpi = xresources.apply_dpi
 local xrdb = require("beautiful.xresources").get_current_theme()
-
 local gfs = require("gears.filesystem")
+local bling = require("module.bling")
 local themes_path = "/usr/share/awesome/theme"
 
 local theme = {}
+--Colors
+theme.black0 = "#161320"
+theme.black1 = "#1A1826"
+theme.black2 = "#1E1E2E"
+theme.black3 = "#302D41"
+
+theme.grey = "#6E6C7E"
+theme.white = "#D9E0EE"
+
+theme.flamingo = "#F2CDCD"
+theme.mauve = "#DDB6F2"
+theme.pink = "#F5C2E7"
+theme.maroon = "#E8A2AF"
+theme.red = "#F28FAD"
+theme.peach = "#F8BD96"
+theme.green = "#ABE9B3"
+theme.teal = "#B5E8E0"
+theme.blue = "#96CDFB"
+theme.sky = "#96CDFB"
+theme.transparent = "#00000000"
+
+
 
 theme.font          = "JetBrains Mono Nerd Font 8"
-theme.icon_font_name = "JetBrains Mono Nerd Font 8"
+theme.font_name = "JetBrains Mono Nerd Font"
 
-theme.xbackground = xrdb.background
-theme.xforeground = xrdb.foreground
-theme.xcolor0 = xrdb.color0
-theme.xcolor1 = xrdb.color1
-theme.xcolor2 = xrdb.color2
-theme.xcolor3 = xrdb.color3
-theme.xcolor4 = xrdb.color4
-theme.xcolor5 = xrdb.color5
-theme.xcolor6 = xrdb.color6
-theme.xcolor7 = xrdb.color7
-theme.xcolor8 = xrdb.color8
-theme.xcolor9 = xrdb.color9
-theme.xcolor10 = xrdb.color10
-theme.xcolor11 = xrdb.color11
-theme.xcolor12 = xrdb.color12
-theme.xcolor13 = xrdb.color13
-theme.xcolor14 = xrdb.color14
-theme.xcolor15 = xrdb.color15
 
-theme.bg_normal     = "#161320"
-theme.bg_focus      = "#C9CBFF"
-theme.bg_urgent     = "#F28FAD"
-theme.bg_minimize   = "#444444"
+theme.xbackground = xrdb.background --Black
+theme.xforeground = xrdb.foreground --White
+theme.xcolor0 = xrdb.color0 --Dark Grey
+theme.xcolor1 = xrdb.color1 --Red
+theme.xcolor2 = xrdb.color2 --Green
+theme.xcolor3 = xrdb.color3 --Yellow
+theme.xcolor4 = xrdb.color4 --Blue
+theme.xcolor5 = xrdb.color5 --Mauve
+theme.xcolor6 = xrdb.color6 --Pink
+theme.xcolor7 = xrdb.color7 --Dark white
+theme.xcolor8 = xrdb.color8 --Light grey
+theme.xcolor9 = xrdb.color9 --Red
+theme.xcolor10 = xrdb.color10 --Green
+theme.xcolor11 = xrdb.color11 --Yellow
+theme.xcolor12 = xrdb.color12 --Blue
+theme.xcolor13 = xrdb.color13 --Mauve
+theme.xcolor14 = xrdb.color14 --Pink
+theme.xcolor15 = xrdb.color15 --White
+
+theme.bg_normal     = theme.xbackground
+theme.bg_focus      = theme.xcolor5
+theme.bg_urgent     = theme.xcolor1
+theme.bg_minimize   = theme.xcolor15
 theme.bg_systray    = theme.bg_normal
 
-theme.fg_normal     = "#aaaaaa"
-theme.fg_focus      = "#ffffff"
-theme.fg_urgent     = "#ffffff"
-theme.fg_minimize   = "#ffffff"
+theme.fg_normal     = theme.xcolor7
+theme.fg_focus      = theme.xbackground
+theme.fg_urgent     = theme.red
+theme.fg_minimize   = theme.xcolor15
 
-theme.useless_gap         = dpi(5)
-theme.border_width        = dpi(2)
-theme.border_color_normal = "#302D41"
-theme.border_color_active = "#C9CBFF"
-theme.border_color_marked = "#F28FAD"
+theme.useless_gap = dpi(5)
+theme.border_width = dpi(2)
+theme.border_radius = dpi(52)
+theme.border_color_normal = theme.xcolor0
+theme.border_color_active = theme.xcolor5
+theme.border_color_marked = theme.xcolor1
 
 
 -- There are other variable sets
@@ -63,7 +87,7 @@ theme.border_color_marked = "#F28FAD"
 -- prompt_[fg|bg|fg_cursor|bg_cursor|font]
 -- hotkeys_[bg|fg|border_width|border_color|shape|opacity|modifiers_fg|label_bg|label_fg|group_margin|font|description_font]
 -- Example:
---theme.taglist_bg_focus = "#ff0000"
+--theme.taglist_bg_focus = theme.red
 
 -- Generate taglist squares:
 local taglist_square_size = dpi(4)
@@ -92,7 +116,22 @@ theme.menu_width  = dpi(100)
 -- beautiful.variable in your rc.lua
 --theme.bg_widget = "#cc0000"
 
+-- Wibar
+theme.wibar_width = dpi(50)
+theme.wibar_bg = theme.black2
+theme.wibar_widget_bg = theme.black3
+theme.wibar_position = "left"
+
+
+--Bling stuff
+-- bling.module.flash_focus.enable()
 -- Define the image to load
+--
+--
+--
+--
+--
+
 theme.titlebar_close_button_normal = themes_path.."default/titlebar/close_normal.png"
 theme.titlebar_close_button_focus  = themes_path.."default/titlebar/close_focus.png"
 
