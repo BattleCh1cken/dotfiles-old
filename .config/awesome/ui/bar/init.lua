@@ -33,9 +33,16 @@ awful.screen.connect_for_each_screen(function(s)
         widget = wibox.container.margin
     }
 
-    helpers.add_hover_cursor(awesome_icon, "hand2")
+mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+                                    { "open terminal", terminal }
+                                  }
+                        })
 
 
+
+
+mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
+                                     menu = mymainmenu })
 
 
 -- Battery
@@ -213,14 +220,6 @@ awful.screen.connect_for_each_screen(function(s)
     client.connect_signal("request::unmanage", add_wibar)
 
      -- Create the taglist widget
-    s.mytaglist = require("ui.bar.pacman-taglist")(s)
-
-    local taglist = wibox.widget{
-        s.mytaglist,
-        shape = beautiful.taglist_shape_focus,
-        bg = beautiful.wibar_widget_bg,
-        widget = wibox.container.background
-    }
 
 s.mywibar:setup {
         {
@@ -228,8 +227,7 @@ s.mywibar:setup {
                 layout = wibox.layout.align.vertical,
                 expand = "none",
                 { -- top
-                awesome_icon,
-                taglist,
+                mylauncher,
                     spacing = dpi(10),
                     layout = wibox.layout.fixed.vertical
                 },
