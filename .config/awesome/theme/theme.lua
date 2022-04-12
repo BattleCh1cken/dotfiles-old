@@ -59,21 +59,21 @@ theme.xcolor14 = xrdb.color14 --Pink
 theme.xcolor15 = xrdb.color15 --White
 
 theme.bg_normal     = theme.xbackground
-theme.bg_focus      = theme.xcolor5
-theme.bg_urgent     = theme.xcolor1
-theme.bg_minimize   = theme.xcolor15
+theme.bg_focus      = theme.mauve
+theme.bg_urgent     = theme.red
+theme.bg_minimize   = theme.white
 theme.bg_systray    = theme.bg_normal
 
-theme.fg_normal     = theme.xcolor7
+theme.fg_normal     = theme.white
 theme.fg_focus      = theme.xbackground
 theme.fg_urgent     = theme.red
-theme.fg_minimize   = theme.xcolor15
+theme.fg_minimize   = theme.white
 
 theme.useless_gap = dpi(5)
 theme.border_width = dpi(2)
 theme.border_radius = dpi(52)
-theme.border_color_normal = theme.xcolor0
-theme.border_color_active = theme.xcolor5
+theme.border_color_normal = theme.black3
+theme.border_color_active = theme.mauve
 theme.border_color_marked = theme.xcolor1
 
 
