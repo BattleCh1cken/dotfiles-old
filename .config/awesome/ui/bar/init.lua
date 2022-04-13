@@ -179,7 +179,6 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
     )
 
     s.mylayoutbox = awful.widget.layoutbox(s)
-    s.mylayoutbox:buttons(layoutbox_buttons)
 
     local layoutbox = wibox.widget{
         s.mylayoutbox,

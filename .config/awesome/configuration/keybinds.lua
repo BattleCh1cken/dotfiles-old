@@ -21,15 +21,10 @@ awful.keyboard.append_global_keybindings({
               {description = "run prompt", group = "launcher"}),
     awful.key({modkey,}, "Tab", function() awful.spawn("rofi -show window") end,
       {description = "switch windows", group = "launcher"}),
-   
 })
 
 -- General Awesome keys
 awful.keyboard.append_global_keybindings({
-    awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
-              {description="show help", group="awesome"}),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
            })
@@ -161,58 +156,6 @@ awful.keyboard.append_global_keybindings({
         end,
     }
 })
---hotkeys
-awful.keyboard.append_global_keybindings({
-    -- Brightness Control
-    awful.key({}, "XF86MonBrightnessUp", function() 
-        awful.spawn("brightnessctl set 5%+ -q") 
-    end,
-    {description = "increase brightness", group = "hotkeys"}),
-    awful.key({}, "XF86MonBrightnessDown", function() 
-        awful.spawn("brightnessctl set 5%- -q") 
-    end,
-    {description = "decrease brightness", group = "hotkeys"}),
-
-    -- Volume control
-    awful.key({}, "XF86AudioRaiseVolume", function()
-        awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +05%")
-    end,
-    {description = "increase volume", group = "hotkeys"}),
-    awful.key({}, "XF86AudioLowerVolume", function()
-        awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ -05%")
-    end,
-    {description = "decrease volume", group = "hotkeys"}),
-    awful.key({}, "XF86AudioMute", function()
-        helpers.volume_control(0)
-    end,
-    {description = "mute volume", group = "hotkeys"}),
-
-    -- Music
-    awful.key({}, "XF86AudioPlay", function()
-        playerctl:play_pause()
-    end,
-    {description = "toggle music", group = "hotkeys"}),
-
-    awful.key({}, "XF86AudioPrev", function()
-        playerctl:previous()
-    end,
-    {description = "previous music", group = "hotkeys"}),
-
-    awful.key({}, "XF86AudioNext", function()
-        playerctl:next()
-    end,
-    {description = "next music", group = "hotkeys"}),
-
-    awful.key({modkey, shift }, "s", function()
-       awful.spawn("flameshot gui")
-    end,
-    {description = "screenshot", group = "hotkeys"}),
-    -- awful.key({ modkey, },"S" function()
-    --   awful.spawn("flameshot gui")
-    -- end,
-    -- {description = "take screenshot", group = "hotkeys"}),
-
-})
 client.connect_signal("request::default_keybindings", function()
     awful.keyboard.append_client_keybindings({
         awful.key({ modkey,           }, "f",
@@ -263,6 +206,62 @@ client.connect_signal("request::default_keybindings", function()
             {description = "(un)maximize horizontally", group = "client"}),
     })
 end)
+--Bling keybinds
+awful.keyboard.append_global_keybindings({
+   awful.key({modkey}, "e", function ()
+      bling.module.tabbed.pick_with_dmenu()
+   end,
+   {description = "tabs away", group = "bling"}),
+
+})
+
+--hotkeys
+awful.keyboard.append_global_keybindings({
+    -- Brightness Control
+    awful.key({}, "XF86MonBrightnessUp", function() 
+        awful.spawn("brightnessctl set 5%+ -q") 
+    end,
+    {description = "increase brightness", group = "hotkeys"}),
+    awful.key({}, "XF86MonBrightnessDown", function() 
+        awful.spawn("brightnessctl set 5%- -q") 
+    end,
+    {description = "decrease brightness", group = "hotkeys"}),
+
+    -- Volume control
+    awful.key({}, "XF86AudioRaiseVolume", function()
+        awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +05%")
+    end,
+    {description = "increase volume", group = "hotkeys"}),
+    awful.key({}, "XF86AudioLowerVolume", function()
+        awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ -05%")
+    end,
+    {description = "decrease volume", group = "hotkeys"}),
+    awful.key({}, "XF86AudioMute", function()
+        helpers.volume_control(0)
+    end,
+    {description = "mute volume", group = "hotkeys"}),
+
+    -- Music
+    awful.key({}, "XF86AudioPlay", function()
+        playerctl:play_pause()
+    end,
+    {description = "toggle music", group = "hotkeys"}),
+
+    awful.key({}, "XF86AudioPrev", function()
+        playerctl:previous()
+    end,
+    {description = "previous music", group = "hotkeys"}),
+
+    awful.key({}, "XF86AudioNext", function()
+        playerctl:next()
+    end,
+    {description = "next music", group = "hotkeys"}),
+
+    awful.key({modkey, shift }, "s", function()
+       awful.spawn("flameshot gui")
+    end,
+    {description = "screenshot", group = "hotkeys"}),
+})
 
 --Mouse Bindings
 client.connect_signal("request::default_mousebindings", function()

@@ -2,6 +2,7 @@
 local awful = require("awful")
 local gears = require("gears")
 
+local hotkeys_popup = require("awful.hotkeys_popup")
 -- Widget library
 local wibox = require("wibox")
 
