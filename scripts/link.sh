@@ -25,6 +25,6 @@ for i in "${config_files[@]}"
 do
   if test -d ~/.config/$i; then
     echo "$i already exists or is already linked"
-  else ln -s ~/dotfiles/.config/"$i" ~/.config/ && echo "linking $i"
+  else ln -s ~/dotfiles/config/"$i" ~/.config/ && echo "linking $i"
   fi
 done
