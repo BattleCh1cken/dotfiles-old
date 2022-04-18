@@ -5,7 +5,7 @@ local M = {}
 
 M.options = {
   relativenumber = true,
-  shiftwidth = 3,
+  shiftwidth = 2,
 }
 
 M.ui = {
@@ -14,7 +14,6 @@ M.ui = {
 
 M.plugins = {
    status = {
-      colorizer = true
 
    },
    install = {
