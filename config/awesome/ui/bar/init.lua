@@ -157,36 +157,17 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
         shape = helpers.rrect(beautiful.widget_radius),
         widget = wibox.container.background
     }
-    -- Layoutbox
-    local layoutbox_buttons = gears.table.join(
-    -- Left click
-    awful.button({}, 1, function (c)
-        awful.layout.inc(1)
-    end),
 
-    -- Right click
-    awful.button({}, 3, function (c) 
-        awful.layout.inc(-1) 
-    end),
-
-    -- Scrolling
-    awful.button({}, 4, function ()
-        awful.layout.inc(-1)
-    end),
-    awful.button({}, 5, function ()
-        awful.layout.inc(1)
-    end)
-    )
-
-    s.mylayoutbox = awful.widget.layoutbox(s)
-
-    local layoutbox = wibox.widget{
-        s.mylayoutbox,
-        margins = {bottom = dpi(7), left = dpi(8), right = dpi(8)},
-        widget = wibox.container.margin
+    local mylayoutbox = awful.widget.layoutbox {
+    screen = s,
+    -- Add buttons, allowing you to change the layout
+    buttons = {
+        awful.button({ }, 1, function () awful.layout.inc( 1) end),
+        awful.button({ }, 3, function () awful.layout.inc(-1) end),
+        awful.button({ }, 4, function () awful.layout.inc( 1) end),
+        awful.button({ }, 5, function () awful.layout.inc(-1) end),
     }
-
-
+  }
     -- Create the wibar
     s.mywibar = awful.wibar({
         type = "dock",
@@ -234,7 +215,7 @@ s.mywibar:setup {
                 nil,
                 { -- bottom
                 stats,
-                layoutbox,
+                mylayoutbox,
                     spacing = dpi(8),
                     layout = wibox.layout.fixed.vertical
                 }
