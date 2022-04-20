@@ -14,9 +14,9 @@
 ## Installation
 You have to be using arch, or an arch based distro to use these.
 
-> git clone https://www.github.com/BattleCh1cken/dotfiles
-> cd dotfiles
-> sh scripts/install.sh
+> git clone https://www.github.com/BattleCh1cken/dotfile <br>
+> cd dotfiles <br>
+> sh scripts/install.sh <br>
 
 
 
