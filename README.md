@@ -1,7 +1,6 @@
-### dotfiles
-============
+# dotfiles
 
-# These dotfiles are a work in progress, I cannot garuantee that they will function.
+## These dotfiles are a work in progress, I cannot garuantee that they will function.
 
 ##Info
 |----------------------|
@@ -15,10 +14,11 @@
 
 ## Installation
 You have to be using arch, or an arch based distro to use these.
-> `git clone https://www.github.com/BattleCh1cken/dotfiles
->  cd dotfiles
->  sh scripts/install.sh`
-
+<code>
+git clone https://www.github.com/BattleCh1cken/dotfiles
+cd dotfiles
+sh scripts/install.sh
+</code>
 
 
 
