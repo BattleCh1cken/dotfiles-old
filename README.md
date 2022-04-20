@@ -4,14 +4,6 @@
 
 ## Info
 
-
-| Syntax      | Description |
-| ----------- | ----------- |
-| Header      | Title       |
-| Paragraph   | Text        |
-
-
-|            |         |
 |------------|---------|
 | WM         | Awesome |
 | Shell      | Zsh     | 
