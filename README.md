@@ -5,6 +5,12 @@
 ## Info
 
 
+| Syntax      | Description |
+| ----------- | ----------- |
+| Header      | Title       |
+| Paragraph   | Text        |
+
+
 |            |         |
 |----------------------|
 | WM         | Awesome |
@@ -17,9 +23,9 @@
 ## Installation
 You have to be using arch, or an arch based distro to use these.
 ```shell
-git clone https://www.github.com/BattleCh1cken/dotfiles \
-cd dotfiles \
-sh scripts/install.sh \
+git clone https://www.github.com/BattleCh1cken/dotfiles
+cd dotfiles
+sh scripts/install.sh
  ```
 
 
