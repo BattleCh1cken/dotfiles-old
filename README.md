@@ -2,7 +2,7 @@
 
 ## These dotfiles are a work in progress, I cannot garuantee that they will function.
 
-##Info
+## Info
 
 
 |            |         |
