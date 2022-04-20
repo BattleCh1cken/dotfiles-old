@@ -36,6 +36,17 @@ M.plugins = {
 				require("custom.config.null-ls").setup()
 			end,
 		},
+		{
+			"Pocco81/TrueZen.nvim",
+			cmd = {
+				"TZAtaraxis",
+				"TZMinimalist",
+				"TZFocus",
+			},
+			config = function()
+				-- check https://github.com/Pocco81/TrueZen.nvim#setup-configuration (init.lua version)
+			end,
+		},
 	},
 }
 
