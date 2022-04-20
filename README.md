@@ -10,15 +10,13 @@
 | Terminal   | Kitty   |
 | Compositor | Picom   |
 | Launcher   | rofi    |
-|----------------------|
 
 ## Installation
 You have to be using arch, or an arch based distro to use these.
-<code>
-git clone https://www.github.com/BattleCh1cken/dotfiles
-cd dotfiles
-sh scripts/install.sh
-</code>
+
+> git clone https://www.github.com/BattleCh1cken/dotfiles
+> cd dotfiles
+> sh scripts/install.sh
 
 
 
