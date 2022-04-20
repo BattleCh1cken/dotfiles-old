@@ -5,6 +5,7 @@
 ##Info
 
 
+|            |         |
 |----------------------|
 | WM         | Awesome |
 | Shell      | Zsh     | 
@@ -15,10 +16,11 @@
 
 ## Installation
 You have to be using arch, or an arch based distro to use these.
-
-> git clone https://www.github.com/BattleCh1cken/dotfiles <br>
-> cd dotfiles <br>
-> sh scripts/install.sh <br>
+``
+git clone https://www.github.com/BattleCh1cken/dotfiles <br>
+cd dotfiles <br>
+sh scripts/install.sh <br>
+ ``
 
 
 
