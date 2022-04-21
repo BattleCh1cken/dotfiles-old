@@ -172,6 +172,13 @@ awful.screen.connect_for_each_screen(function(s)
       end),
     },
   })
+
+  --Taglist
+  --------
+  local taglist = awful.widget.taglist({
+    screen = s,
+    filter = awful.widget.taglist.filter.all,
+  })
   -- Create the wibar
   s.mywibar = awful.wibar({
     type = "dock",
@@ -212,6 +219,7 @@ awful.screen.connect_for_each_screen(function(s)
         expand = "none",
         { -- top
           mylauncher,
+          taglist,
           spacing = dpi(10),
           layout = wibox.layout.fixed.vertical,
         },
