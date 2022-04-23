@@ -175,10 +175,17 @@ awful.screen.connect_for_each_screen(function(s)
 
   --Taglist
   --------
-  local taglist = awful.widget.taglist({
-    screen = s,
-    filter = awful.widget.taglist.filter.all,
+  --
+  -- Create the taglist widget
+  s.mytaglist = require("ui.bar.pacman-taglist")(s)
+
+  local taglist = wibox.widget({
+    s.mytaglist,
+    shape = beautiful.taglist_shape_focus,
+    bg = beautiful.wibar_widget_alt_bg,
+    widget = wibox.container.background,
   })
+  --
   -- Create the wibar
   s.mywibar = awful.wibar({
     type = "dock",

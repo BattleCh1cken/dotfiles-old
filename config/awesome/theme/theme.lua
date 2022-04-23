@@ -37,8 +37,11 @@ theme.blue = "#96CDFB"
 theme.sky = "#96CDFB"
 theme.transparent = "#00000000"
 
-theme.font = "JetBrains Mono Nerd Font 8"
-theme.font_name = "JetBrains Mono Nerd Font"
+theme.font_name = "JetBrains Mono Nerd Font "
+theme.font = theme.font_name .. "8"
+theme.icon_font_name = "Material Design Icons Desktop "
+theme.icon_font = theme.icon_font_name .. "18"
+theme.font_taglist = theme.icon_font_name .. "14"
 
 theme.xbackground = xrdb.background --Black
 theme.xforeground = xrdb.foreground --White
