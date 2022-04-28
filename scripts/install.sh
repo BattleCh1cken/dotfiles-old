@@ -22,6 +22,7 @@ installChaotic() {
 installNVChad() {
 	if test -d ~/.config/nvim; then
 		echo "existing nvim config detected, delete it first"
+		ln -s ~/dotfiles/config/NvChad/custom ~/.config/nvim/lua/
 	else
 		{
 			git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
