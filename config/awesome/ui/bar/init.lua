@@ -177,14 +177,29 @@ awful.screen.connect_for_each_screen(function(s)
   --------
   --
   -- Create the taglist widget
-  s.mytaglist = require("ui.bar.pacman-taglist")(s)
-
-  local taglist = wibox.widget({
+  s.mytaglist = awful.widget.taglist {
+    screen  = s,
+    filter  = awful.widget.taglist.filter.all,
+    buttons = taglist_buttons,
+    layout = {spacing = dpi(5), layout = wibox.layout.fixed.vertical},
+    margins = dpi(1),
+    style   = {
+        shape = gears.shape.rectangle
+    },
+    valign = "center",
+    halign = "center"
+  }
+  
+  s.taglistcontainer = wibox.widget{
     s.mytaglist,
-    shape = beautiful.taglist_shape_focus,
-    bg = beautiful.wibar_widget_alt_bg,
-    widget = wibox.container.background,
-  })
+    top = dpi(10),
+    bottom = dpi(10),
+    left = dpi(1),
+    right = dpi(1),
+    align = "center",
+    widget = wibox.container.margin
+  }
+
   --
   -- Create the wibar
   s.mywibar = awful.wibar({
@@ -226,7 +241,7 @@ awful.screen.connect_for_each_screen(function(s)
         expand = "none",
         { -- top
           mylauncher,
-          taglist,
+          s.taglistcontainer,
           spacing = dpi(10),
           layout = wibox.layout.fixed.vertical,
         },
@@ -248,5 +263,5 @@ awful.screen.connect_for_each_screen(function(s)
   })
 
   -- wibar position
-  s.mywibar.x = dpi(25)
+  s.mywibar.x = dpi(5)
 end)
