@@ -6,8 +6,5 @@ end,
 },
 ["williamboman/nvim-lsp-installer"] = {
   after = "nvim-lspconfig",
-  config = function()
-    require(custom.plugins.lspconfig).setup()
-  end,
 },
 }

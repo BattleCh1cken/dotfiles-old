@@ -7,6 +7,13 @@ local M = {}
 -- example of changing theme:
 
 M.plugins = {
+  options = {
+    lspconfig = {
+      setup_lspconf = "custom.plugins.lspinstall"
+      
+    },
+
+  },
   user = userPlugins,
 }
 
