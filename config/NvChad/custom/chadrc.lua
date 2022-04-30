@@ -7,14 +7,24 @@ local M = {}
 -- example of changing theme:
 
 M.plugins = {
-  options = {
-},
-
   user = userPlugins,
 }
 
 M.ui = {
    theme = "catppuccin",
+}
+M.options = {
+  user = function()
+    vim.opt.relativenumber = true
+  end,
+}
+M.treesitter = {
+  ensure_installed = {
+    "lua",
+    "cpp",
+    "bash",
+
+  }
 }
 
 return M
