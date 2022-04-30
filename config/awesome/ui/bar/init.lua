@@ -109,7 +109,7 @@ awful.screen.connect_for_each_screen(function(s)
 
   local hour = wibox.widget({
     font = beautiful.font_name .. "bold 14",
-    format = "%H",
+    format = "%I",
     align = "center",
     valign = "center",
     widget = wibox.widget.textclock,
@@ -206,7 +206,7 @@ awful.screen.connect_for_each_screen(function(s)
     type = "dock",
     position = "left",
     screen = s,
-    height = awful.screen.focused().geometry.height - dpi(50),
+    height = awful.screen.focused().geometry.height - dpi(20),
     width = beautiful.wibar_width,
     bg = beautiful.transparent,
     ontop = true,

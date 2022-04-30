@@ -16,6 +16,8 @@ local theme_assets = require("beautiful.theme_assets")
 local bling_theme_path = "~/.config/awesome/module/bling/icons/layouts/"
 
 local theme = {}
+
+theme.wallpaper = "~/Pictures/wallpaper.png"
 --Colors
 theme.black0 = "#161320"
 theme.black1 = "#1A1826"
@@ -78,7 +80,7 @@ theme.border_width = dpi(2)
 theme.border_radius = dpi(5)
 theme.border_color_normal = theme.black3
 theme.border_color_active = theme.mauve
-theme.border_color_marked = theme.xcolor1
+theme.border_color_marked = theme.red
 
 -- Generate taglist squares:
 local taglist_square_size = dpi(4)
@@ -103,21 +105,20 @@ theme.wibar_position = "left"
 --Bling stuff
 -- bling.module.flash_focus.enable()
 -- Tabs
-theme.mstab_bar_height = dpi(60)
-theme.mstab_bar_padding = dpi(0)
-theme.mstab_border_radius = dpi(6)
-theme.tabbar_disable = true
-theme.tabbar_style = "modern"
-theme.tabbar_bg_focus = theme.xbackground
-theme.tabbar_bg_normal = theme.xcolor0
-theme.tabbar_fg_focus = theme.xcolor0
-theme.tabbar_fg_normal = theme.xcolor15
-theme.tabbar_position = "bottom"
-theme.tabbar_AA_radius = 0
-theme.tabbar_size = 40
-theme.mstab_bar_ontop = true
+-- theme.mstab_bar_height = dpi(60)
+-- theme.mstab_bar_padding = dpi(0)
+-- theme.mstab_border_radius = dpi(6)
+-- theme.tabbar_disable = true
+-- theme.tabbar_style = "modern"
+-- theme.tabbar_bg_focus = theme.xbackground
+-- theme.tabbar_bg_normal = theme.xcolor0
+-- theme.tabbar_fg_focus = theme.xcolor0
+-- theme.tabbar_fg_normal = theme.xcolor15
+-- theme.tabbar_position = "bottom"
+-- theme.tabbar_AA_radius = 0
+-- theme.tabbar_size = 40
+-- theme.mstab_bar_ontop = true
 
-theme.wallpaper = "~/Pictures/wallpaper.png"
 
 -- You can use your own layout icons like this:
 theme.layout_centered = bling_theme_path .. "centered.png"
