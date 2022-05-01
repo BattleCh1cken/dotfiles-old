@@ -10,7 +10,6 @@ M.plugins = {
   options = {
     lspconfig = {
       setup_lspconf = "custom.plugins.lspinstall"
-      
     },
 
   },
@@ -25,14 +24,7 @@ M.options = {
     vim.opt.relativenumber = true
   end,
 }
-M.treesitter = {
-  ensure_installed = {
-    "lua",
-    "cpp",
-    "bash",
 
-  }
-}
 
 return M
 

@@ -7,4 +7,8 @@ end,
 ["williamboman/nvim-lsp-installer"] = {
   after = "nvim-lspconfig",
 },
+["ggandor/lightspeed.nvim"] = {},
+["goolord/alpha-nvim"] = {
+         disable = false,
+      },
 }
