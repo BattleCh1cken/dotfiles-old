@@ -3,7 +3,7 @@
 local M = {}
 --Keybinds
 local opts = { noremap=true, silent=true }
-vim.api.nvim_set_keymap('n', '<leader>le', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>ll', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
 M.setup_lsp = function(attach, capabilities)
   local lsp_installer = require("nvim-lsp-installer")
   lsp_installer.settings({
@@ -29,7 +29,7 @@ M.setup_lsp = function(attach, capabilities)
 
           Lua = {
             diagnostics = {
-              globals = { "vim" },
+              globals = { "vim", "awesome"},
             },
             workspace = {
               library = {
