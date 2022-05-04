@@ -6,6 +6,7 @@ local xresources = require("beautiful.xresources")
 local rnotification = require("ruled.notification")
 local dpi = xresources.apply_dpi
 local xrdb = require("beautiful.xresources").get_current_theme()
+local gears = require("gears")
 local gfs = require("gears.filesystem")
 local bling = require("module.bling")
 --Theme stuff
@@ -64,16 +65,24 @@ theme.xcolor13 = xrdb.color13 --Mauve
 theme.xcolor14 = xrdb.color14 --Pink
 theme.xcolor15 = xrdb.color15 --White
 
-theme.bg_normal = theme.xbackground
-theme.bg_focus = theme.mauve
+-- Background Colors
+theme.bg_dark = theme.black1
+theme.bg_normal = theme.black2
+theme.bg_focus = theme.black3
 theme.bg_urgent = theme.red
-theme.bg_minimize = theme.white
-theme.bg_systray = theme.bg_normal
+theme.bg_minimize = theme.black1
+theme.bg_secondary = theme.darker_bg
+theme.bg_accent = theme.lighter_bg
 
+-- Accent colors
+theme.accent = theme.mauve
+theme.hover_effect = theme.accent .. "44"
+
+-- Foreground Colors
 theme.fg_normal = theme.white
-theme.fg_focus = theme.xbackground
+theme.fg_focus = theme.accent
 theme.fg_urgent = theme.red
-theme.fg_minimize = theme.white
+theme.fg_minimize = theme.grey
 
 theme.useless_gap = dpi(5)
 theme.border_width = dpi(2)
@@ -82,61 +91,30 @@ theme.border_color_normal = theme.black3
 theme.border_color_active = theme.mauve
 theme.border_color_marked = theme.red
 
--- Generate taglist squares:
-local taglist_square_size = dpi(4)
-theme.taglist_squares_sel = theme_assets.taglist_squares_sel(taglist_square_size, theme.fg_normal)
-theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(taglist_square_size, theme.fg_normal)
-
--- Variables set for theming notifications:
-theme.menu_submenu_icon = themes_path .. "default/submenu.png"
-theme.menu_height = dpi(15)
-theme.menu_width = dpi(100)
-
 -- Wibar
 theme.wibar_width = dpi(50)
 theme.wibar_bg = theme.black2
 theme.wibar_widget_bg = theme.black3
 theme.wibar_position = "left"
 
+-- Generate taglist squares:
+local taglist_square_size = dpi(2)
+theme.taglist_squares_sel = theme_assets.taglist_squares_sel(taglist_square_size, theme.fg_normal)
+theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(taglist_square_size, theme.fg_normal)
+
+-- Variables set for theming notifications:
+
 --Bling stuff
--- bling.module.flash_focus.enable()
--- Tabs
--- theme.mstab_bar_height = dpi(60)
--- theme.mstab_bar_padding = dpi(0)
--- theme.mstab_border_radius = dpi(6)
--- theme.tabbar_disable = true
--- theme.tabbar_style = "modern"
--- theme.tabbar_bg_focus = theme.xbackground
--- theme.tabbar_bg_normal = theme.xcolor0
--- theme.tabbar_fg_focus = theme.xcolor0
--- theme.tabbar_fg_normal = theme.xcolor15
--- theme.tabbar_position = "bottom"
--- theme.tabbar_AA_radius = 0
--- theme.tabbar_size = 40
--- theme.mstab_bar_ontop = true
-
-
--- You can use your own layout icons like this:
-theme.layout_centered = bling_theme_path .. "centered.png"
--- theme.layout_fairh = themes_path.."default/layouts/fairhw.png"
--- theme.layout_fairv = themes_path.."default/layouts/fairvw.png"
--- theme.layout_floating  = themes_path.."default/layouts/floatingw.png"
--- theme.layout_magnifier = themes_path.."default/layouts/magnifierw.png"
--- theme.layout_max = themes_path.."default/layouts/maxw.png"
--- theme.layout_fullscreen = themes_path.."default/layouts/fullscreenw.png"
--- theme.layout_tilebottom = themes_path.."default/layouts/tilebottomw.png"
--- theme.layout_tileleft   = themes_path.."default/layouts/tileleftw.png"
+--
+--
+--
+--Icons
+theme.layout_centered = gfs.get_configuration_dir() .. "/ui/assets/layouts/centered.png"
 theme.layout_tile = themes_path .. "default/layouts/tilew.png"
--- theme.layout_tiletop = themes_path.."default/layouts/tiletopw.png"
 theme.layout_spiral = themes_path .. "default/layouts/spiralw.png"
--- theme.layout_dwindle = themes_path.."default/layouts/dwindlew.png"
--- theme.layout_cornernw = themes_path.."default/layouts/cornernww.png"
--- theme.layout_cornerne = themes_path.."default/layouts/cornernew.png"
--- theme.layout_cornersw = themes_path.."default/layouts/cornersww.png"
--- theme.layout_cornerse = themes_path.."default/layouts/cornersew.png"
 
 -- Generate Awesome icon:
-theme.awesome_icon = theme_assets.awesome_icon(theme.menu_height, theme.bg_focus, theme.fg_focus)
+theme.awesome_icon = gears.color.recolor_image(gfs.get_configuration_dir() .. "icons/awesome_logo.svg", theme.mauve)
 
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.

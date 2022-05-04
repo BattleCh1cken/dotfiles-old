@@ -2,7 +2,6 @@ export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 export EDITOR="nvim"
 export SUDO_EDITOR="nvim"
 export VISUAL="nvim"
-
 export BROWSER="firefox"
 
 export LANG=en_US.UTF-8

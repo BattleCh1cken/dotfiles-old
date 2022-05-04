@@ -67,29 +67,29 @@ screen.connect_signal("request::wallpaper", function(s)
   })
 end)
 -- }}}
-
+require("icons")
 require("ui")
 require("configuration")
 require("signal")
 
 -- {{{ Notifications
 
-ruled.notification.connect_signal("request::rules", function()
-  -- All notifications will match this rule.
-  ruled.notification.append_rule({
-    rule = {},
-    properties = {
-      screen = awful.screen.preferred,
-      implicit_timeout = 5,
-    },
-  })
-end)
-
-naughty.connect_signal("request::display", function(n)
-  naughty.layout.box({ notification = n })
-end)
-
--- }}}
+-- ruled.notification.connect_signal("request::rules", function()
+--   -- All notifications will match this rule.
+--   ruled.notification.append_rule({
+--     rule = {},
+--     properties = {
+--       screen = awful.screen.preferred,
+--       implicit_timeout = 5,
+--     },
+--   })
+-- end)
+--
+-- naughty.connect_signal("request::display", function(n)
+--   naughty.layout.box({ notification = n })
+-- end)
+--
+-- -- }}}
 
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
