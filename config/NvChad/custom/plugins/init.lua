@@ -8,13 +8,4 @@ end,
 ["goolord/alpha-nvim"] = {
          disable = false,
       },
-["nvim-neorg/neorg"] = {
-  ft = norg,
-  config = function()
-        require('neorg').setup {
-        }
-    end,
-    requires = "nvim-lua/plenary.nvim"
-  
-},
 }
