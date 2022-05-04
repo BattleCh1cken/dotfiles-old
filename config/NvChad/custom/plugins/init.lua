@@ -4,11 +4,17 @@ config = function()
   require("custom.plugins.null-ls").setup()
 end,
 },
-["williamboman/nvim-lsp-installer"] = {
-  after = "nvim-lspconfig",
-},
 ["ggandor/lightspeed.nvim"] = {},
 ["goolord/alpha-nvim"] = {
          disable = false,
       },
+["nvim-neorg/neorg"] = {
+  ft = norg,
+  config = function()
+        require('neorg').setup {
+        }
+    end,
+    requires = "nvim-lua/plenary.nvim"
+  
+},
 }
