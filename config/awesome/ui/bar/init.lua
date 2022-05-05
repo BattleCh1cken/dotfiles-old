@@ -48,7 +48,7 @@ awful.screen.connect_for_each_screen(function(s)
     thickness = dpi(4),
     padding = dpi(2),
     start_angle = math.pi * 3 / 2,
-    color = { beautiful.xcolor2 },
+    color = { beautiful.green },
     bg = beautiful.black2,
     widget = wibox.container.arcchart,
   })
@@ -62,13 +62,13 @@ awful.screen.connect_for_each_screen(function(s)
     local color
 
     if charge_icon.visible then
-      color = beautiful.xcolor6
+      color = beautiful.pink
     elseif value <= batt_critical_value then
-      color = beautiful.xcolor1
+      color = beautiful.red
     elseif value <= batt_low_value then
-      color = beautiful.xcolor3
+      color = beautiful.yellow
     else
-      color = beautiful.xcolor2
+      color = beautiful.green
     end
 
     batt.colors = { color }
@@ -79,16 +79,16 @@ awful.screen.connect_for_each_screen(function(s)
     local color
     if state then
       charge_icon.visible = true
-      color = beautiful.xcolor6
+      color = beautiful.pink
     elseif batt_last_value <= batt_critical_value then
       charge_icon.visible = false
-      color = beautiful.xcolor1
+      color = beautiful.red
     elseif batt_last_value <= batt_low_value then
       charge_icon.visible = false
-      color = beautiful.xcolor3
+      color = beautiful.yellow
     else
       charge_icon.visible = false
-      color = beautiful.xcolor2
+      color = beautiful.green
     end
 
     batt.colors = { color }

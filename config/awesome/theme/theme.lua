@@ -96,6 +96,10 @@ theme.wibar_width = dpi(50)
 theme.wibar_bg = theme.black2
 theme.wibar_widget_bg = theme.black3
 theme.wibar_position = "left"
+--Dashboard
+theme.dashboard_bg = theme.black2
+theme.dashboard_widget_bg = theme.black3
+theme.dashboard_fg = theme.white
 
 -- Generate taglist squares:
 local taglist_square_size = dpi(2)

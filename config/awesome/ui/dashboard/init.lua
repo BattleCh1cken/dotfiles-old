@@ -22,9 +22,9 @@ awful.screen.connect_for_each_screen(function(s)
   dashboard = wibox({
     type = "dock",
     screen = s,
-    height = dpi(670),
+    height = awful.screen.focused().geometry.height - 19,
     width = dpi(620),
-    x = s.geometry.x + s.geometry.width / 2 - dpi(310), --half of the width
+    x = 56,
     bg = beautiful.transparent,
     ontop = true,
     visible = false,
@@ -52,7 +52,7 @@ awful.screen.connect_for_each_screen(function(s)
   -- Make toogle button
   local dashboardShow = function()
     dashboard.visible = true
-    slide.target = dpi(80)
+    slide.target = dpi(10)
     dashboard:emit_signal("opened")
   end
 
@@ -70,4 +70,18 @@ awful.screen.connect_for_each_screen(function(s)
       dashboardShow()
     end
   end
+  local cpu = wibox.widget({
+      value = 0,
+      thickness = dpi(4),
+      color = beautiful.mauve,
+      bg = beautiful.dashboard_widget_bg,
+      widget = wibox.container.accchart,
+  })
+
+  dashboard:setup({
+    cpu,
+    bg = beautiful.dashboard_bg,
+    shape = helpers.rrect(beautiful.notif_center_radius),
+    widget = wibox.container.background,
+  })
 end)
