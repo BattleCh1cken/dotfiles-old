@@ -1,5 +1,6 @@
 local gears = require("gears")
 local awful = require("awful")
+local naughty = require("naughty")
 local hotkeys_popup = require("awful.hotkeys_popup")
 
 local beautiful = require("beautiful")
@@ -22,6 +23,9 @@ awful.keyboard.append_global_keybindings({
   awful.key({ modkey }, "Tab", function()
     awful.spawn("rofi -show window")
   end, { description = "switch windows", group = "launcher" }),
+  awful.key({ modkey }, "v", function ()
+    dashboard:toggle()
+  end), {description = "toggle the dashboard", group = "launcher"}
 })
 
 -- General Awesome keys

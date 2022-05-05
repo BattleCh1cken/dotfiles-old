@@ -8,11 +8,17 @@ local M = {}
 
 M.plugins = {
   user = userPlugins,
+  options = {
+      lspconfig = {
+         setup_lspconf = "custom.plugins.lspconfig",
+      },
+},
 }
 
 M.ui = {
    theme = "catppuccin",
 }
+
 M.options = {
   user = function()
     vim.opt.relativenumber = true
