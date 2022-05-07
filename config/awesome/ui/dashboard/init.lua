@@ -71,15 +71,71 @@ awful.screen.connect_for_each_screen(function(s)
     end
   end
   local cpu = wibox.widget({
-      value = 0,
-      thickness = dpi(4),
-      color = beautiful.mauve,
-      bg = beautiful.dashboard_widget_bg,
-      widget = wibox.container.accchart,
+    value = 0,
+    thickness = dpi(4),
+    color = beautiful.mauve,
+    bg = beautiful.dashboard_widget_bg,
+    widget = wibox.container.accchart,
+  })
+  local textMoment = wibox.widget({
+    {
+      {
+        text = "foo",
+        widget = wibox.widget.textbox,
+      },
+      {
+        text = "bar",
+        widget = wibox.widget.textbox,
+      },
+      layout = wibox.layout.fixed.vertical,
+    },
+    bg = "#ff0000",
+    widget = wibox.container.background,
   })
 
   dashboard:setup({
-    cpu,
+    {
+      {
+        expand = "none",
+        layout = wibox.layout.fixed.vertical,
+        {
+          layout = wibox.layout.align.horizontal,
+          expand = "none",
+          nil,
+          textMoment,
+          nil,
+        },
+        textMoment,
+        {
+          layout = wibox.layout.stack,
+          {
+            id = "dashboard_id",
+            visible = true,
+            layout = wibox.layout.fixed.vertical,
+            {
+              layout = wibox.layout.flex.horizontal,
+              spacing = dpi(10),
+              spacing_widget = wibox.widget.separator({
+                span_ratio = 0.80,
+                color = beautiful.lighter_bg,
+              }),
+              textMoment,
+            },
+          },
+          {
+            id = "settings_id",
+            visible = false,
+            layout = wibox.layout.fixed.vertical,
+            {
+              layout = wibox.layout.fixed.vertical,
+              textMoment,
+            },
+          },
+        },
+      },
+      margins = dpi(10),
+      widget = wibox.container.margin,
+    },
     bg = beautiful.dashboard_bg,
     shape = helpers.rrect(beautiful.notif_center_radius),
     widget = wibox.container.background,
