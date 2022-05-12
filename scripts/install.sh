@@ -32,8 +32,14 @@ installNVChad() {
 	fi
 }
 installPackages() {
-	yay -S --noconfirm --needed awesome-git kitty rofi picom neovim ripgrep zsh zsh-autosuggestions zsh-syntax-highlighting zoxide starship exa playerctl brightnessctl acpi
-}
+  cd ~
+  PKGS=$(cat ~/dotfiles/scripts/pkg-list.txt)
+  for PKG in $PKGS
+  do
+    yay -S $PKG --noconfirm --needed
+  done
+  
+  }
 
 linkDotfiles() {
 	home_files=(.bashrc .zshrc .xinitrc .Xresources .gitconfig .aliases)
@@ -82,7 +88,10 @@ echo -ne "
 read choice
 case "$choice" in
 0)
-	installYay installChaotic installPackages linkDotfiles
+	installYay
+        installPackages
+        installNVChad
+        linkDotfiles
 	;;
 1)
 	installYay

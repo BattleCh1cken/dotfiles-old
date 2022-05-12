@@ -168,10 +168,9 @@ awful.screen.connect_for_each_screen(function(s)
   --------
   --
   -- Create the taglist widget
-  s.mytaglist = awful.widget.taglist({
+  local mytaglist = awful.widget.taglist({
     screen = s,
     filter = awful.widget.taglist.filter.all,
-    buttons = taglist_buttons,
     layout = { spacing = dpi(5), layout = wibox.layout.fixed.vertical },
     margins = dpi(1),
     style = {
@@ -181,15 +180,17 @@ awful.screen.connect_for_each_screen(function(s)
     halign = "center",
   })
 
-  s.taglistcontainer = wibox.widget({
-    s.mytaglist,
-    top = dpi(10),
-    bottom = dpi(10),
-    left = dpi(1),
-    right = dpi(1),
-    align = "center",
-    widget = wibox.container.margin,
+  local taglistcontainer = wibox.widget({
+    {
+      wrap_widget(mytaglist),
+      spacing = dpi(5),
+      layout = wibox.layout.fixed.vertical,
+    },
+    bg = beautiful.wibar_widget_bg,
+    shape = helpers.rrect(beautiful.widget_radius),
+    widget = wibox.container.background,
   })
+
 
   --
   -- Create the wibar
@@ -232,7 +233,7 @@ awful.screen.connect_for_each_screen(function(s)
         expand = "none",
         { -- top
           awesome_icon,
-          s.taglistcontainer,
+          taglistcontainer,
           spacing = dpi(10),
           layout = wibox.layout.fixed.vertical,
         },
